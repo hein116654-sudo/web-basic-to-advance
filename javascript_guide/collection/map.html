@@ -1,0 +1,849 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JavaScript Map Study</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .intro {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        button {
+            border: none;
+            padding: 10px 16px;
+            margin: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #2563eb;
+            color: white;
+            font-size: 14px;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        pre {
+            background: #111827;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+
+        .output {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            min-height: 40px;
+            white-space: pre-wrap;
+        }
+
+        .highlight {
+            color: #2563eb;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="intro">
+
+            <h1>JavaScript Map</h1>
+
+            <p>
+                A <span class="highlight">Map</span> stores data as
+                <strong>key-value pairs</strong>.
+            </p>
+
+            <p>
+                Example:
+            </p>
+
+            <pre>
+            const students = new Map();
+
+            students.set(101, "Rahul");
+            students.set(102, "Amit");
+            students.set(103, "Neha");
+        </pre>
+
+        </div>
+
+
+        <!-- 1. CREATE MAP -->
+
+        <div class="section">
+
+            <h2>1. Create a Map</h2>
+
+            <pre>
+const students = new Map();
+
+console.log(students);
+        </pre>
+
+            <button onclick="createMap()">
+                Run Example
+            </button>
+
+            <div id="createOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 2. SET -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>2. set() — Add Data</h2>
+
+            <p>
+                <code>set(key, value)</code> adds a key-value pair.
+            </p>
+
+            <pre>
+students.set(101, "Rahul");
+students.set(102, "Amit");
+students.set(103, "Neha");
+        </pre>
+
+            <button onclick="setExample()">
+                Run Example
+            </button>
+
+            <div id="setOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 3. GET -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>3. get() — Get Value</h2>
+
+            <pre>
+students.get(102);
+        </pre>
+
+            <button onclick="getExample()">
+                Get Student 102
+            </button>
+
+            <div id="getOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 4. HAS -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>4. has() — Check Key</h2>
+
+            <pre>
+students.has(102);
+students.has(999);
+        </pre>
+
+            <button onclick="hasExample()">
+                Check Keys
+            </button>
+
+            <div id="hasOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 5. DELETE -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>5. delete() — Remove Data</h2>
+
+            <pre>
+students.delete(102);
+        </pre>
+
+            <button onclick="deleteExample()">
+                Delete Student 102
+            </button>
+
+            <div id="deleteOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 6. KEYS -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>6. keys() — Get All Keys</h2>
+
+            <pre>
+students.keys();
+        </pre>
+
+            <button onclick="keysExample()">
+                Show Keys
+            </button>
+
+            <div id="keysOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 7. VALUES -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>7. values() — Get All Values</h2>
+
+            <pre>
+students.values();
+        </pre>
+
+            <button onclick="valuesExample()">
+                Show Values
+            </button>
+
+            <div id="valuesOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 8. ENTRIES -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>8. entries() — Get Key + Value</h2>
+
+            <pre>
+students.entries();
+        </pre>
+
+            <button onclick="entriesExample()"> 
+                Show Entries
+            </button>
+
+            <div id="entriesOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 9. FOR OF -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>9. for...of — Loop Through Map</h2>
+
+            <pre>
+for (let [key, value] of students) {
+    console.log(key, value);
+}
+        </pre>
+
+            <button onclick="forOfExample()">
+                Run Loop
+            </button>
+
+            <div id="forOfOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 10. FOREACH -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>10. forEach() — Loop Through Map</h2>
+
+            <pre>
+students.forEach((value, key) => {
+    console.log(key, value);
+});
+        </pre>
+
+            <button onclick="forEachExample()">
+                Run forEach
+            </button>
+
+            <div id="forEachOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 11. DUPLICATE KEY -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>11. Duplicate Key</h2>
+
+            <p>
+                Map cannot have duplicate keys.
+                If the same key is used again, the value is updated.
+            </p>
+
+            <pre>
+const users = new Map();
+
+users.set(1, "John");
+users.set(1, "David");
+
+console.log(users.get(1));
+        </pre>
+
+            <button onclick="duplicateKeyExample()">
+                Run Example
+            </button>
+
+            <div id="duplicateKeyOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 12. DUPLICATE VALUE -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>12. Duplicate Values</h2>
+
+            <p>
+                Map can contain duplicate values.
+            </p>
+
+            <pre>
+const employees = new Map();
+
+employees.set(1, "John");
+employees.set(2, "John");
+employees.set(3, "David");
+        </pre>
+
+            <button onclick="duplicateValueExample()">
+                Run Example
+            </button>
+
+            <div id="duplicateValueOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 13. ANY TYPE KEY -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>13. Any Data Type Can Be a Key</h2>
+
+            <pre>
+const map = new Map();
+
+map.set("name", "Hein");
+map.set(100, "Number Key");
+map.set(true, "Boolean Key");
+        </pre>
+
+            <button onclick="anyTypeKeyExample()">
+                Run Example
+            </button>
+
+            <div id="anyTypeOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 14. OBJECT AS KEY -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>14. Object as a Key</h2>
+
+            <pre>
+const user = {
+    id: 1,
+    name: "Hein"
+};
+
+const map = new Map();
+
+map.set(user, "User Data");
+
+console.log(map.get(user));
+        </pre>
+
+            <button onclick="objectKeyExample()">
+                Run Example
+            </button>
+
+            <div id="objectKeyOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 15. SIZE -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>15. size — Number of Elements</h2>
+
+            <pre>
+students.size
+        </pre>
+
+            <button onclick="sizeExample()">
+                Show Size
+            </button>
+
+            <div id="sizeOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- 16. CLEAR -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>16. clear() — Remove Everything</h2>
+
+            <pre>
+students.clear();
+        </pre>
+
+            <button onclick="clearExample()">
+                Clear Map
+            </button>
+
+            <div id="clearOutput" class="output"></div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- FINAL SUMMARY -->
+        <!-- ========================= -->
+
+        <div class="section">
+
+            <h2>Map Methods Summary</h2>
+
+            <pre>
+new Map()       → Create Map
+
+set()           → Add / Update
+get()           → Get value
+has()           → Check key
+delete()        → Delete one key
+clear()         → Delete everything
+
+keys()          → Get keys
+values()        → Get values
+entries()       → Get key + value
+forEach()       → Loop through Map
+
+size            → Number of elements
+        </pre>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // =========================================
+        // Global Map
+        // =========================================
+
+        let students = new Map();
+
+
+        // =========================================
+        // 1. CREATE MAP
+        // =========================================
+
+        function createMap() {
+
+            const map = new Map();
+
+            document.getElementById("createOutput").textContent =
+                "Created Map successfully!\n" +
+                map.toString();
+
+        }
+
+
+        // =========================================
+        // 2. SET
+        // =========================================
+
+        function setExample() {
+
+            students.set(101, "Rahul");
+            students.set(102, "Amit");
+            students.set(103, "Neha");
+
+            document.getElementById("setOutput").textContent =
+                JSON.stringify([...students], null, 2);
+
+        }
+
+
+        // =========================================
+        // 3. GET
+        // =========================================
+
+        function getExample() {
+
+            students.set(101, "Rahul");
+            students.set(102, "Amit");
+            students.set(103, "Neha");
+
+            const result = students.get(102);
+
+            document.getElementById("getOutput").textContent =
+                "students.get(102)\n\n" +
+                result;
+
+        }
+
+
+        // =========================================
+        // 4. HAS
+        // =========================================
+
+        function hasExample() {
+
+            students.set(101, "Rahul");
+            students.set(102, "Amit");
+
+            const result1 = students.has(102);
+            const result2 = students.has(999);
+
+            document.getElementById("hasOutput").textContent =
+                "students.has(102) → " + result1 + "\n" +
+                "students.has(999) → " + result2;
+
+        }
+
+
+        // =========================================
+        // 5. DELETE
+        // =========================================
+
+        function deleteExample() {
+
+            students.set(101, "Rahul");
+            students.set(102, "Amit");
+            students.set(103, "Neha");
+
+            const deleted = students.delete(102);
+
+            document.getElementById("deleteOutput").textContent =
+                "Deleted: " + deleted + "\n\n" +
+                JSON.stringify([...students], null, 2);
+
+        }
+
+
+        // =========================================
+        // 6. KEYS
+        // =========================================
+
+        function keysExample() {
+
+            students.set(101, "Rahul");
+            students.set(102, "Amit");
+            students.set(103, "Neha");
+
+            const keys = [...students.keys()];
+
+            document.getElementById("keysOutput").textContent =
+                keys.join("\n");
+
+        }
+
+
+        // =========================================
+        // 7. VALUES
+        // =========================================
+
+        function valuesExample() {
+
+            students.set(101, "Rahul");
+            students.set(102, "Amit");
+            students.set(103, "Neha");
+
+            const values = [...students.values()];
+
+            document.getElementById("valuesOutput").textContent =
+                values.join("\n");
+
+        }
+
+
+        // =========================================
+        // 8. ENTRIES
+        // =========================================
+
+        function entriesExample() {
+
+            students.set(101, "Rahul");
+            students.set(102, "Amit");
+            students.set(103, "Neha");
+
+            const entries = [...students.entries()];
+
+            document.getElementById("entriesOutput").textContent =
+                JSON.stringify(entries, null, 2);
+
+        }
+
+
+        // =========================================
+        // 9. FOR OF
+        // =========================================
+
+        function forOfExample() {
+
+            students.set(101, "Rahul");
+            students.set(102, "Amit");
+            students.set(103, "Neha");
+
+            let result = "";
+
+            for (let [key, value] of students) {
+
+                result += key + " : " + value + "\n";
+
+            }
+
+            document.getElementById("forOfOutput").textContent =
+                result;
+
+        }
+
+
+        // =========================================
+        // 10. FOREACH
+        // =========================================
+
+        function forEachExample() {
+
+            students.set(101, "Rahul");
+            students.set(102, "Amit");
+            students.set(103, "Neha");
+
+            let result = "";
+
+            students.forEach((value, key) => {
+
+                result += key + " : " + value + "\n";
+
+            });
+
+            document.getElementById("forEachOutput").textContent =
+                result;
+        }
+
+
+        // =========================================
+        // 11. DUPLICATE KEY
+        // =========================================
+
+        function duplicateKeyExample() {
+
+            const users = new Map();
+
+            users.set(1, "John");
+            users.set(1, "David");
+
+            document.getElementById("duplicateKeyOutput").textContent =
+                "users.get(1) → " + users.get(1) + "\n\n" +
+                "Same key = value gets updated";
+
+        }
+
+
+        // =========================================
+        // 12. DUPLICATE VALUE
+        // =========================================
+
+        function duplicateValueExample() {
+
+            const employees = new Map();
+
+            employees.set(1, "John");
+            employees.set(2, "John");
+            employees.set(3, "David");
+
+            document.getElementById("duplicateValueOutput").textContent =
+                JSON.stringify([...employees], null, 2);
+
+        }
+
+
+        // =========================================
+        // 13. ANY TYPE KEY
+        // =========================================
+
+        function anyTypeKeyExample() {
+
+            const map = new Map();
+
+            map.set("name", "Hein");
+            map.set(100, "Number Key");
+            map.set(true, "Boolean Key");
+
+            document.getElementById("anyTypeOutput").textContent =
+                "String key → " + map.get("name") + "\n" +
+                "Number key → " + map.get(100) + "\n" +
+                "Boolean key → " + map.get(true);
+
+        }
+
+
+        // =========================================
+        // 14. OBJECT AS KEY
+        // =========================================
+
+        function objectKeyExample() {
+
+            const user = {
+                id: 1,
+                name: "Hein"
+            };
+
+            const map = new Map();
+
+            map.set(user, "User Data");
+
+            document.getElementById("objectKeyOutput").textContent =
+                map.get(user);
+
+        }
+
+
+        // =========================================
+        // 15. SIZE
+        // =========================================
+
+        function sizeExample() {
+
+            students.set(101, "Rahul");
+            students.set(102, "Amit");
+            students.set(103, "Neha");
+
+            document.getElementById("sizeOutput").textContent =
+                "students.size = " + students.size;
+
+        }
+
+
+        // =========================================
+        // 16. CLEAR
+        // =========================================
+
+        function clearExample() {
+
+            students.set(101, "Rahul");
+            students.set(102, "Amit");
+            students.set(103, "Neha");
+
+            students.clear();
+
+            document.getElementById("clearOutput").textContent =
+                "Map cleared!\n" +
+                "students.size = " + students.size;
+
+        }
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Functional Array Methods</title>
+</head>
+<body>
+
+    <h2>Functional Array Methods</h2>
+
+    <p>Original Numbers: <span id="original-numbers"></span></p>
+
+    <div>
+        <h3>1. map() — Double each number</h3>
+        <p>Result: <strong id="map-output"></strong></p>
+    </div>
+
+    <div>
+        <h3>2. filter() — Keep even numbers only</h3>
+        <p>Result: <strong id="filter-output"></strong></p>
+    </div>
+
+    <div>
+        <h3>3. reduce() — Sum all numbers</h3>
+        <p>Result: <strong id="reduce-output"></strong></p>
+    </div>
+
+    <script>
+        const numbers = [1, 2, 3, 4, 5];
+        document.getElementById("original-numbers").textContent = JSON.stringify(numbers);
+
+        // 1. map()
+        const doubled = numbers.map(n => n * 2);
+        console.log("Doubled:", doubled);
+        document.getElementById("map-output").textContent = JSON.stringify(doubled);
+
+        // 2. filter()
+        const evens = numbers.filter(n => n % 2 === 0);
+        console.log("Evens:", evens);
+        document.getElementById("filter-output").textContent = JSON.stringify(evens);
+
+        // 3. reduce()
+        const sum = numbers.reduce((total, n) => total + n, 0);
+        console.log("Sum:", sum);
+        document.getElementById("reduce-output").textContent = sum;
+    </script>
+
+</body>
+</html>

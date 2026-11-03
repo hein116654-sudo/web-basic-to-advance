@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Lucky Love Scratch Cards 🎟️❤️</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Padauk:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% 35%, #4b1648, #20091f 55%, #09010c);
+      font-family: 'Fredoka', 'Padauk', sans-serif;
+      color: white;
+      padding: 35px 18px;
+      overflow-x: hidden;
+      text-align: center;
+    }
+
+    #sparkles {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .sparkle {
+      position: absolute;
+      bottom: -40px;
+      color: #ffd700;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(.6);
+        opacity: 0;
+      }
+      30% { opacity: .8; }
+      100% {
+        transform: translateY(-120vh) rotate(240deg) scale(1.3);
+        opacity: 0;
+      }
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1120px;
+      margin: auto;
+    }
+
+    .title-area {
+      margin-bottom: 30px;
+    }
+
+    .main-title {
+      color: #ffdf5d;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      text-shadow: 0 0 15px #ff477e, 0 0 35px #ff477e;
+    }
+
+    .sub-title {
+      margin-top: 10px;
+      color: #ffb4d1;
+      font-family: 'Padauk', sans-serif;
+      font-size: 1.1rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      align-items: start;
+    }
+
+    .ticket-wrapper {
+      background: linear-gradient(135deg, #ff416c, #ff8a44, #ff416c);
+      padding: 7px;
+      border-radius: 23px;
+      box-shadow: 0 12px 35px #ff416c45, 0 0 0 1px #ffd700;
+      transition: transform .3s;
+    }
+
+    .ticket-wrapper:hover {
+      transform: translateY(-5px);
+    }
+
+    .ticket-card {
+      background: #fff;
+      color: #292036;
+      padding: 18px 13px;
+      border-radius: 17px;
+    }
+
+    .ticket-header {
+      padding-bottom: 13px;
+      margin-bottom: 15px;
+      border-bottom: 2px dashed #ff8eaa;
+    }
+
+    .ticket-badge {
+      display: inline-block;
+      background: #fff0f4;
+      color: #f3276c;
+      border: 1px solid #ffc4d4;
+      padding: 5px 10px;
+      border-radius: 30px;
+      font-size: .72rem;
+      font-weight: 700;
+      margin-bottom: 9px;
+    }
+
+    .ticket-prompt {
+      font-size: 1.05rem;
+      line-height: 1.35;
+    }
+
+    .scratch-container {
+      position: relative;
+      width: 100%;
+      height: 210px;
+      border-radius: 13px;
+      overflow: hidden;
+      border: 2px solid #d4af37;
+      box-shadow: 0 5px 18px #0002;
+      touch-action: none;
+    }
+
+    .secret-content {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(135deg, #fff5f8, #ffdce8);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .secret-sticker {
+      font-size: 36px;
+      margin-bottom: 5px;
+      animation: heartbeat 1.2s infinite;
+    }
+
+    @keyframes heartbeat {
+      50% { transform: scale(1.15); }
+    }
+
+    .secret-title {
+      font-size: 1.1rem;
+      line-height: 1.4;
+      color: #e52d68;
+      margin-bottom: 7px;
+    }
+
+    .secret-text {
+      font-family: 'Padauk', sans-serif;
+      font-size: .98rem;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .secret-reward {
+      margin-top: 10px;
+      background: #ff477e;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: .75rem;
+    }
+
+    .scratchCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      touch-action: none;
+      cursor: crosshair;
+      transition: opacity .5s;
+    }
+
+    .hint-bar {
+      margin-top: 12px;
+      color: #777;
+      font-size: .78rem;
+    }
+
+    .hint-bar span {
+      color: #ff477e;
+    }
+
+    .status {
+      margin-top: 25px;
+      color: #ffd700;
+      font-size: 1rem;
+    }
+
+    .reset-btn {
+      margin-top: 20px;
+      padding: 12px 28px;
+      border: 2px solid #ffd700;
+      border-radius: 30px;
+      color: #ffd700;
+      background: transparent;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .reset-btn:hover {
+      background: #ffd700;
+      color: #210a20;
+      box-shadow: 0 0 25px #ffd70080;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 760px) {
+      .cards {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+        margin: auto;
+      }
+
+      .scratch-container {
+        height: 230px;
+      }
+
+      .ticket-card {
+        padding: 20px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="sparkles"></div>
+
+  <main class="page">
+
+    <header class="title-area">
+      <h1 class="main-title">✨ Lucky Love Scratch Card ✨</h1>
+      <p class="sub-title">
+        ခြစ်ပြီး ကံစမ်းကြည့်လိုက်ပါ အသဲလေး 🥰❤️
+      </p>
+    </header>
+
+    <section class="cards" id="cards"></section>
+
+    <p class="status" id="status">
+      🎟️ Card ၃ ခုလုံးကို ခြစ်ကြည့်လိုက်ပါ ❤️
+    </p>
+
+    <button class="reset-btn" id="resetBtn">
+      Scratch Again ↺
+    </button>
+
+  </main>
+
+  <script>
+    // 1. Random Love Messages (5 choices)
+
+    const prizes = [
+      {
+        emoji: '🥰❤️',
+        title: 'YOU WON MY HEART!',
+        message: 'မင်းကို အမြဲတမ်း အချစ်ဆုံးက ငါပါပဲကွာ 🌸',
+        reward: 'Prize: Forever Love 💖'
+      },
+      {
+        emoji: '🌹💐',
+        title: 'ENDLESS LOVE!',
+        message: 'မင်းရဲ့ အပြုံးလေးက ငါ့နေ့ရက်တိုင်းရဲ့ ပျော်ရွှင်မှုပါ 🌹',
+        reward: 'Prize: 1000 Hugs 🤗'
+      },
+      {
+        emoji: '💍💖',
+        title: 'YOU ARE SPECIAL!',
+        message: 'လူအများကြီးထဲမှာ ငါ့အတွက်တော့ မင်းက အထူးခြားဆုံးပါ 🫶',
+        reward: 'Prize: Lifetime Happiness ✨'
+      },
+      {
+        emoji: '🧸💕',
+        title: 'A BIG HUG FOR YOU!',
+        message: 'ပင်ပန်းတဲ့အချိန်တိုင်း ငါ့ရင်ခွင်လေးမှာ နားခိုလို့ရတယ်နော် 🧸',
+        reward: 'Prize: Unlimited Hugs 🤗'
+      },
+      {
+        emoji: '💌😘',
+        title: 'SECRET ADMIRER!',
+        message: 'မင်းမသိသေးပေမယ့် မင်းကို သဘောကျနေတဲ့သူတစ်ယောက် ရှိတယ်နော် 😘',
+        reward: 'Prize: One Sweet Date 💕'
+      }
+    ];
+
+    const cardsElement = document.getElementById('cards');
+    const statusElement = document.getElementById('status');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let revealedCount = 0;
+    let cardStates = [];
+
+    // 2. Create 3 scratch cards
+
+    function createCards() {
+      cardsElement.innerHTML = '';
+      revealedCount = 0;
+      cardStates = [];
+
+      statusElement.textContent =
+        '🎟️ Card ၃ ခုလုံးကို ခြစ်ကြည့်လိုက်ပါ ❤️';
+
+      resetBtn.style.display = 'none';
+
+      // Shuffle prize order so each card gets a random message.
+      const shuffled = [...prizes].sort(() => Math.random() - 0.5);
+      const selectedPrizes = shuffled.slice(0, 3);
+
+      selectedPrizes.forEach((prize, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'ticket-wrapper';
+
+        wrapper.innerHTML = `
+          <div class="ticket-card">
+            <div class="ticket-header">
+              <span class="ticket-badge">
+                🎟️ 100% LOVE PRIZE
+              </span>
+              <h2 class="ticket-prompt">
+                Card ${index + 1}<br>
+                Scratch To Reveal Your Surprise!
+              </h2>
+            </div>
+
+            <div class="scratch-container">
+              <div class="secret-content">
+                <div class="secret-sticker">${prize.emoji}</div>
+                <h3 class="secret-title">${prize.title}</h3>
+                <p class="secret-text">${prize.message}</p>
+                <div class="secret-reward">${prize.reward}</div>
+              </div>
+
+              <canvas class="scratchCanvas"></canvas>
+            </div>
+
+            <div class="hint-bar">
+              🪙 <span>Swipe or drag to scratch!</span>
+            </div>
+          </div>
+        `;
+
+        cardsElement.appendChild(wrapper);
+
+        const canvas = wrapper.querySelector('.scratchCanvas');
+        const container = wrapper.querySelector('.scratch-container');
+        const hint = wrapper.querySelector('.hint-bar span');
+
+        const state = {
+          canvas,
+          container,
+          hint,
+          ctx: canvas.getContext('2d', {
+            willReadFrequently: true
+          }),
+          scratching: false,
+          revealed: false,
+          lastSound: 0
+        };
+
+        cardStates.push(state);
+        setupCanvas(state);
+        attachScratchEvents(state);
+      });
+    }
+
+    // 3. Draw gold foil on each canvas
+
+    function setupCanvas(state) {
+      const { canvas, container, ctx } = state;
+
+      const rect = container.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const width = rect.width;
+      const height = rect.height;
+
+      const gradient = ctx.createLinearGradient(0, 0, width, height);
+
+      gradient.addColorStop(0, '#c38a38');
+      gradient.addColorStop(0.25, '#fff0a5');
+      gradient.addColorStop(0.5, '#d4af37');
+      gradient.addColorStop(0.75, '#fff4bf');
+      gradient.addColorStop(1, '#b8860b');
+
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+
+      // Golden glitter
+
+      for (let i = 0; i < 150; i++) {
+        ctx.beginPath();
+        ctx.arc(
+          Math.random() * width,
+          Math.random() * height,
+          Math.random() * 1.8 + 0.3,
+          0,
+          Math.PI * 2
+        );
+
+        ctx.fillStyle = 'rgba(255,255,255,0.6)';
+        ctx.fill();
+      }
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#674513';
+      ctx.font = 'bold 17px Fredoka, sans-serif';
+      ctx.fillText('✨ SCRATCH HERE ✨', width / 2, height / 2 - 12);
+
+      ctx.font = '14px Padauk, sans-serif';
+      ctx.fillText(
+        'ဒီနေရာလေးကို ခြစ်ကြည့်ပါ 🪙',
+        width / 2,
+        height / 2 + 17
+      );
+    }
+
+    // 4. Scratch logic
+
+    function scratchAt(state, event) {
+      if (!state.scratching || state.revealed) return;
+
+      const rect = state.canvas.getBoundingClientRect();
+
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      state.ctx.globalCompositeOperation = 'destination-out';
+      state.ctx.beginPath();
+      state.ctx.arc(x, y, 23, 0, Math.PI * 2);
+      state.ctx.fill();
+
+      // Play a light scratch sound occasionally
+
+      const now = performance.now();
+
+      if (now - state.lastSound > 100) {
+        state.lastSound = now;
+        playScratchSound();
+      }
+
+      checkProgress(state, dpr);
+    }
+
+    function checkProgress(state, dpr) {
+      const { canvas, ctx } = state;
+
+      // Sample every few pixels instead of checking every pixel.
+
+      const step = 8;
+      let transparent = 0;
+      let total = 0;
+
+      for (let y = 0; y < canvas.height; y += step) {
+        for (let x = 0; x < canvas.width; x += step) {
+          total++;
+
+          if (ctx.getImageData(x, y, 1, 1).data[3] < 20) {
+            transparent++;
+          }
+        }
+      }
+
+      if (total && transparent / total > 0.42) {
+        revealCard(state);
+      }
+    }
+
+    // 5. Reveal one card
+
+    function revealCard(state) {
+      if (state.revealed) return;
+
+      state.revealed = true;
+      state.scratching = false;
+
+      state.canvas.style.opacity = '0';
+      state.canvas.style.pointerEvents = 'none';
+      state.hint.textContent = '🎉 Surprise revealed! ❤️';
+
+      revealedCount++;
+
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 70,
+          spread: 65,
+          origin: { y: 0.65 }
+        });
+      }
+
+      if (revealedCount === 3) {
+        statusElement.textContent =
+          '🎉 All 3 cards revealed! အချစ်တွေအပြည့်ပါပဲ ❤️';
+
+        resetBtn.style.display = 'inline-block';
+
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 150,
+            spread: 100,
+            origin: { y: 0.6 }
+          });
+        }
+      } else {
+        statusElement.textContent =
+          `💖 ${revealedCount}/3 cards revealed! နောက်တစ်ခုလည်း ခြစ်ကြည့်ပါ။`;
+      }
+    }
+
+    // 6. Scratch sound
+
+    let audioContext;
+
+    function playScratchSound() {
+      try {
+        const AudioContextClass =
+          window.AudioContext || window.webkitAudioContext;
+
+        if (!AudioContextClass) return;
+
+        if (!audioContext) {
+          audioContext = new AudioContextClass();
+        }
+
+        if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+
+        const bufferSize = Math.floor(audioContext.sampleRate * 0.025);
+        const buffer = audioContext.createBuffer(
+          1,
+          bufferSize,
+          audioContext.sampleRate
+        );
+
+        const data = buffer.getChannelData(0);
+
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+
+        const noise = audioContext.createBufferSource();
+        const gain = audioContext.createGain();
+
+        noise.buffer = buffer;
+        gain.gain.setValueAtTime(0.015, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(
+          0.001,
+          audioContext.currentTime + 0.025
+        );
+
+        noise.connect(gain);
+        gain.connect(audioContext.destination);
+        noise.start();
+      } catch (error) {
+        // Sound is optional; the game still works without it.
+      }
+    }
+
+    // 7. Pointer events work for mouse, pen and touch
+
+    function attachScratchEvents(state) {
+      const canvas = state.canvas;
+
+      canvas.addEventListener('pointerdown', event => {
+        if (state.revealed) return;
+
+        state.scratching = true;
+        canvas.setPointerCapture(event.pointerId);
+        scratchAt(state, event);
+      });
+
+      canvas.addEventListener('pointermove', event => {
+        scratchAt(state, event);
+      });
+
+      function stopScratching() {
+        state.scratching = false;
+      }
+
+      canvas.addEventListener('pointerup', stopScratching);
+      canvas.addEventListener('pointercancel', stopScratching);
+      canvas.addEventListener('lostpointercapture', stopScratching);
+    }
+
+    // 8. Floating sparkles
+
+    const sparklesContainer = document.getElementById('sparkles');
+
+    for (let i = 0; i < 30; i++) {
+      const sparkle = document.createElement('div');
+
+      sparkle.className = 'sparkle';
+      sparkle.textContent = ['✨', '⭐', '💖', '🌟', '💕'][
+        Math.floor(Math.random() * 5)
+      ];
+
+      sparkle.style.left = Math.random() * 100 + 'vw';
+      sparkle.style.fontSize = 12 + Math.random() * 15 + 'px';
+      sparkle.style.animationDuration = 4 + Math.random() * 6 + 's';
+      sparkle.style.animationDelay = Math.random() * 5 + 's';
+
+      sparklesContainer.appendChild(sparkle);
+    }
+
+    // 9. Reset all three cards
+
+    resetBtn.addEventListener('click', createCards);
+
+    // Initialize
+
+    createCards();
+
+    // Rebuild canvas sizes if the screen changes size.
+
+    let resizeTimer;
+
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+
+      resizeTimer = setTimeout(() => {
+        cardStates.forEach(state => {
+          if (!state.revealed) {
+            setupCanvas(state);
+          }
+        });
+      }, 150);
+    });
+  </script>
+</body>
+</html>

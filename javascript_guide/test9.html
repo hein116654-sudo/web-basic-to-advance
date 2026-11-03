@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Array and Object</h2>
+
+    <script>
+        const fruits = ['Apple', 'Orange', 'Banana'];
+        console.log("Array size before push:", fruits.length);
+        fruits.push('Mango');
+        console.log("Array size after push:", fruits.length);
+
+
+        //for....of , output arrray
+        for (const abcd of fruits){
+            console.log('- ', abcd);
+        }
+
+      console.log('Normale For loop');
+        for (let i = 0; i < fruits.length; i ++) {
+            console.log(fruits[i]);
+        }
+
+    </script>
+
+</body>
+</html>

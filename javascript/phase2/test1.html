@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Manipulation Demo</title>
+</head>
+<body>
+
+    <div>
+        <!-- Main title element -->
+        <h1 id="main-title">Original Title</h1>
+
+        <!-- List items -->
+        <ul>
+            <li class="list-item">Item 1</li>
+            <li class="list-item">Item 2</li>
+            <li class="list-item">Item 3</li>
+        </ul>
+
+        <!-- Action button -->
+        <button class="my-button">Click Me to Change Style!</button>
+    </div>
+
+    <script>
+        // 1. Selecting Elements
+        const title = document.getElementById("main-title");
+        const btn = document.querySelector(".my-button");
+        const allItems = document.querySelectorAll(".list-item");
+
+        // 2. Initial Modifications
+        title.textContent = "Initial Title (Ready to Click)";
+        title.classList.add("highlight");
+
+        allItems.forEach((item, index) => {
+            item.textContent = `List Item ${index + 1} (Loaded)`;
+        });
+
+        // 3. Click Event with Dynamic Text Changes
+        btn.addEventListener("click", () => {
+            // Toggle active class
+            title.classList.toggle("active");
+
+            // Dynamic text change on click
+            if (title.classList.contains("active")) {
+                title.textContent = "Active State (Clicked!)";
+                btn.textContent = "Click to Reset";
+            } else {
+                title.textContent = "Initial Title (Reset)";
+                btn.textContent = "Click Me to Change Style!";
+            }
+        });
+    </script>
+
+</body>
+</html>

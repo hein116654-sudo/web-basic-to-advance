@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Promise Example</title>
+</head>
+<body>
+
+<script>
+
+    const fetchUsersData = new Promise((resolve, reject) => {
+
+        console.log("Request data from server....Please wait");
+
+        const isServerOnline = false;
+
+        setTimeout(() => {
+
+            if (isServerOnline) {
+
+                resolve([
+                    { id: 1, name: 'Aung Aung', role: 'Admin' },
+                    { id: 2, name: 'Su Su', role: 'User' }
+                ]);
+
+            } else {
+
+                reject("Server is shutdown. Failed to connect!");
+
+            }
+
+        }, 9000);
+
+    });
+
+    fetchUsersData
+        .then(users => {
+            console.log("Success! Data received.");
+            console.log(users);
+        })
+        .catch(error => {
+            console.log("Error:", error);
+        })
+        .finally(() => {
+            console.log("Process is done");
+        });
+
+</script>
+
+</body>
+</html>

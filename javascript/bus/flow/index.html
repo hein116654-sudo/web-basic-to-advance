@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Flower Blooming Wall & Carousel 🌸</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Padauk:wght@400;700&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at center, #6b0f2b 0%, #2b0412 60%, #0d0106 100%);
+      font-family: 'Padauk', sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+
+    /* NEBULA SPARKLES */
+    .nebula {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 75, 130, 0.45) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* THE GIFT BOX */
+    .gift-wrap {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+
+    .gift-wrap.vanish {
+      transform: scale(0.6);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .box-svg {
+      width: 140px;
+      height: 140px;
+      animation: boxWobble 2.4s infinite ease-in-out;
+      filter: drop-shadow(0 15px 35px rgba(255, 42, 116, 0.7));
+    }
+
+    @keyframes boxWobble {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-12px) rotate(-6deg); }
+      75% { transform: translateY(-6px) rotate(6deg); }
+    }
+
+    .box-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 28px;
+      margin-top: 14px;
+      color: #ffe5ec;
+      text-shadow: 0 0 18px rgba(255, 117, 168, 0.9);
+    }
+
+    .box-sub {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 6px;
+    }
+
+    /* ==============================================
+       ပန်းပင်လယ်ကြီး ပွင့်ထွက်လာမည့် နေရာ
+       ============================================== */
+    #flowerGarden {
+      position: fixed;
+      inset: -50px;
+      pointer-events: none;
+      z-index: 20;
+      overflow: hidden;
+    }
+
+    .real-flower {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0) rotate(0deg);
+      opacity: 0;
+      will-change: transform, left, top, opacity;
+      filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.65));
+      pointer-events: none;
+      transition: 
+        left 1.4s cubic-bezier(0.16, 0.88, 0.25, 1),
+        top 1.4s cubic-bezier(0.16, 0.88, 0.25, 1),
+        transform 1.3s cubic-bezier(0.18, 0.89, 0.32, 1.25),
+        opacity 0.5s ease;
+    }
+
+    .real-flower.bloomed {
+      transform: translate(-50%, -50%) scale(1) rotate(var(--target-rot));
+      opacity: 1;
+    }
+
+    /* ==============================================
+       ROMANTIC CAROUSEL MODAL (၅ ခုပါ CAROUSEL)
+       ============================================== */
+    .card-wrap {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.85) translateY(30px);
+      transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card-wrap.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1) translateY(0);
+    }
+
+    .carousel-card {
+      width: 100%;
+      max-width: 390px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-radius: 34px;
+      padding: 24px 18px 20px;
+      text-align: center;
+      color: #380415;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.75), 0 0 50px rgba(255, 75, 130, 0.5);
+      border: 3px solid #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Carousel Slider Window */
+    .carousel-track-wrapper {
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: 12px;
+      touch-action: pan-y;
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      padding: 4px 6px;
+      user-select: none;
+    }
+
+    .sticker-tag {
+      font-family: 'Caveat', cursive;
+      font-size: 34px;
+      color: #c9184a;
+      background: #fff0f3;
+      padding: 3px 20px;
+      border-radius: 20px;
+      border: 2px dashed #ff758f;
+      display: inline-block;
+      margin-bottom: 14px;
+      transform: rotate(-2deg);
+    }
+
+    .slide-icon {
+      font-size: 38px;
+      display: block;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 4px 8px rgba(201, 24, 74, 0.2));
+    }
+
+    .love-text {
+      font-size: 15px;
+      line-height: 1.85;
+      color: #590d22;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .love-text b {
+      color: #c9184a;
+    }
+
+    /* Carousel Controls & Pagination */
+    .carousel-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      padding: 0 4px;
+    }
+
+    .nav-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ffe5ec;
+      border: 2px solid #ffb3c6;
+      color: #c9184a;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:active {
+      transform: scale(0.9);
+      background: #ffb3c6;
+    }
+
+    /* Indicator Dots */
+    .dots-container {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffccd5;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      width: 22px;
+      border-radius: 12px;
+      background: #ff4d6d;
+    }
+
+    /* Action Button on Final Slide */
+    .btn-action {
+      width: 100%;
+      background: linear-gradient(135deg, #ff4d6d, #c9184a);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 14px;
+      box-shadow: 0 6px 18px rgba(201, 24, 74, 0.35);
+      transition: transform 0.2s;
+    }
+
+    .btn-action:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nebula"></div>
+
+  <!-- လက်ဆောင်ဗူး -->
+  <div class="gift-wrap" id="giftBox" onclick="startFlowerBloom()">
+    <div class="box-svg">
+      <svg viewBox="0 0 140 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="45" width="100" height="75" rx="8" fill="#FFFFFF" stroke="#FFC0D3" stroke-width="3"/>
+        <circle cx="35" cy="60" r="3" fill="#FF85A2"/>
+        <circle cx="55" cy="75" r="3" fill="#FF85A2"/>
+        <circle cx="85" cy="60" r="3" fill="#FF85A2"/>
+        <circle cx="105" cy="75" r="3" fill="#FF85A2"/>
+        <circle cx="35" cy="95" r="3" fill="#FF85A2"/>
+        <circle cx="70" cy="100" r="3" fill="#FF85A2"/>
+        <circle cx="105" cy="98" r="3" fill="#FF85A2"/>
+        <rect x="61" y="45" width="18" height="75" fill="#E61F63"/>
+        <rect x="14" y="30" width="112" height="20" rx="5" fill="#FFFFFF" stroke="#FFC0D3" stroke-width="3"/>
+        <rect x="61" y="30" width="18" height="20" fill="#E61F63"/>
+        <path d="M70 32 C50 10 30 25 64 32 Z" fill="#E61F63" stroke="#B3003B" stroke-width="1.5"/>
+        <path d="M70 32 C90 10 110 25 76 32 Z" fill="#E61F63" stroke="#B3003B" stroke-width="1.5"/>
+        <circle cx="70" cy="32" r="7" fill="#FF2A74" stroke="#FFF" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="box-title">For Jim 💖</div>
+    <div class="box-sub">လက်ဆောင်ဗူးလေးကို နှိပ်ပါ ✨</div>
+  </div>
+
+  <!-- ပန်းများ ပွင့်ထွက်လာမည့် Container -->
+  <div id="flowerGarden"></div>
+
+  <!-- ROMANTIC CAROUSEL CARD -->
+  <div class="card-wrap" id="romanticCard">
+    <div class="carousel-card">
+      
+      <!-- Track Wrapper -->
+      <div class="carousel-track-wrapper" id="trackWrapper">
+        <div class="carousel-track" id="carouselTrack">
+          
+          <!-- SLIDE 1: INTRO -->
+          <div class="carousel-slide">
+            <div class="sticker-tag">Favorite person 💕</div>
+            <span class="slide-icon">🌸</span>
+            <p class="love-text">
+              <b>ကမ္ဘာပေါ်မှာ ကိုယ့်အတွက် အချစ်ရဆုံး အသဲလေးရေ...</b><br>
+              ဒီပန်းလေးတွေ ဘယ်လောက်ပဲ လှပနေပါစေ...<br>
+              ကိုယ့်အတွက်တော့ <b>မင်းရဲ့ အပြုံးလေးလောက်</b><br>
+              ဘယ်အရာမှ မလှပနိုင်ပါဘူး 🥺💗
+            </p>
+          </div>
+
+          <!-- SLIDE 2: GRATITUDE -->
+          <div class="carousel-slide">
+            <div class="sticker-tag">Thank you 💌</div>
+            <span class="slide-icon">🥰</span>
+            <p class="love-text">
+              ကိုယ့်ဘဝထဲကို <b>မင်း ရောက်လာပေးခဲ့လို့</b><br>
+              အရမ်းပဲ ကျေးဇူးတင်ပါတယ်နော်...<br>
+              အမြဲတမ်း ကိုယ့်ဘေးနားမှာ အဖော်ပြုပေးပြီး<br>
+              နားလည်ပေးလို့ အရမ်းချစ်တယ် ✨
+            </p>
+          </div>
+
+          <!-- SLIDE 3: THINGS I LOVE ABOUT YOU -->
+          <div class="carousel-slide">
+            <div class="sticker-tag">Cute things ✨</div>
+            <span class="slide-icon">🥺</span>
+            <p class="love-text">
+              မင်းရဲ့ ချစ်စရာ <b>နှုတ်ခမ်းစူစူလေး</b> ရော၊<br>
+              ရယ်လိုက်ရင် မျက်လုံးလေး မှိတ်သွားတာလေးနဲ့<br>
+              ကလေးလေးလို ဂျီကျတတ်တာလေးအထိ...<br>
+              မင်းရဲ့ အရာရာတိုင်းကို သဘောကျတယ် 😘
+            </p>
+          </div>
+
+          <!-- SLIDE 4: PROMISE -->
+          <div class="carousel-slide">
+            <div class="sticker-tag">My Promise 💍</div>
+            <span class="slide-icon">💖</span>
+            <p class="love-text">
+              ဘယ်လောက်ပဲ စိတ်ကောက်ပါစေ...<br>
+              <b>မင်းလက်ကို ဘယ်တော့မှ မလွှတ်ဘဲ</b><br>
+              တစ်သက်လုံး ရင်ခွင်ထဲမှာ ထာဝရ<br>
+              ယုယကြင်နာပြီး ချစ်သွားပါ့မယ်နော် ❤️
+            </p>
+          </div>
+
+          <!-- SLIDE 5: FOREVER TOGETHER -->
+          <div class="carousel-slide">
+            <div class="sticker-tag">Forever with you 👩‍❤️‍👨</div>
+            <span class="slide-icon">✨</span>
+            <p class="love-text">
+              ရှေ့ဆက်ပြီးတော့လည်း ချစ်စရာကောင်းတဲ့<br>
+              <b>အမှတ်တရပေါင်းများစွာကို အတူတူ</b><br>
+              ဖန်တီးကြမယ်နော် အသဲလေးရေ...<br>
+              ထာဝရ အများကြီး ချစ်တယ်နော် ❤️
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Carousel Navigation (Next / Prev + Dots) -->
+      <div class="carousel-nav">
+        <button class="nav-btn" onclick="prevSlide()">‹</button>
+        
+        <div class="dots-container" id="dotsContainer">
+          <div class="dot active" onclick="goToSlide(0)"></div>
+          <div class="dot" onclick="goToSlide(1)"></div>
+          <div class="dot" onclick="goToSlide(2)"></div>
+          <div class="dot" onclick="goToSlide(3)"></div>
+          <div class="dot" onclick="goToSlide(4)"></div>
+        </div>
+
+        <button class="nav-btn" onclick="nextSlide()">›</button>
+      </div>
+
+      <!-- Action Button -->
+      <button class="btn-action" onclick="celebrateLove()">
+        အရမ်းချစ်တယ် အသဲလေးရေ ❤️
+      </button>
+
+    </div>
+  </div>
+
+  <script>
+    // ထည့်ထားသော flower1.png နှင့် flower2.png ဖိုင်များ
+    const flowerImages = [
+      "flower1.png",
+      "flower2.png"
+    ];
+
+    let hasBloomed = false;
+
+    function startFlowerBloom() {
+      if (hasBloomed) return;
+      hasBloomed = true;
+
+      document.getElementById("giftBox").classList.add("vanish");
+
+      const garden = document.getElementById("flowerGarden");
+      const totalFlowers = 90;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      for (let i = 0; i < totalFlowers; i++) {
+        const flower = document.createElement("img");
+        flower.className = "real-flower";
+        flower.src = flowerImages[i % flowerImages.length];
+
+        const flowerSize = Math.floor(Math.random() * 150) + 150;
+        flower.style.width = flowerSize + "px";
+        flower.style.height = "auto";
+
+        const targetX = Math.random() * (width + 100) - 50;
+        const targetY = Math.random() * (height + 100) - 50;
+        const targetRotation = Math.floor(Math.random() * 360) + "deg";
+        flower.style.setProperty("--target-rot", targetRotation);
+
+        garden.appendChild(flower);
+
+        const delay = Math.random() * 750 + 30;
+        setTimeout(() => {
+          flower.style.left = targetX + "px";
+          flower.style.top = targetY + "px";
+          flower.classList.add("bloomed");
+        }, delay);
+      }
+
+      setTimeout(() => {
+        document.getElementById("romanticCard").classList.add("show");
+      }, 1600);
+    }
+
+    // ==========================================
+    // CAROUSEL LOGIC (SLIDE 1 TO 5)
+    // ==========================================
+    let currentSlide = 0;
+    const totalSlides = 5;
+    const track = document.getElementById("carouselTrack");
+    const dots = document.querySelectorAll(".dot");
+
+    function updateCarousel() {
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("active", index === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      updateCarousel();
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      updateCarousel();
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateCarousel();
+    }
+
+    // Touch Swipe Support (ဖုန်းမှာ လက်နဲ့ ဘေးကိုဆွဲပြီး ကြည့်နိုင်ရန်)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const wrapper = document.getElementById("trackWrapper");
+
+    wrapper.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    wrapper.addEventListener("touchend", (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      if (touchStartX - touchEndX > 45) {
+        nextSlide(); // Swipe Left -> Next
+      }
+      if (touchEndX - touchStartX > 45) {
+        prevSlide(); // Swipe Right -> Prev
+      }
+    }
+
+    // အောင်ပွဲခံ စက္ကူမိုးကြဲခြင်း
+    function celebrateLove() {
+      confetti({
+        particleCount: 110,
+        spread: 85,
+        origin: { y: 0.6 }
+      });
+    }
+  </script>
+</body>
+</html>

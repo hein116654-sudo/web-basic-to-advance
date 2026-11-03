@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacking Into Your Heart ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Orbitron:wght@700;900&family=Padauk:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #050208;
+      color: #00ff66;
+      font-family: 'Fira Code', 'Padauk', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      padding: 20px;
+    }
+
+    /* 1. Matrix Digital Rain Canvas */
+    #matrixCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      opacity: 0.35;
+    }
+
+    /* CRT Scanline Effect */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.4) 50%
+      );
+      background-size: 100% 4px;
+    }
+
+    /* 2. Cyber Hacker Terminal Window */
+    .terminal-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 620px;
+      background: rgba(10, 4, 15, 0.95);
+      border: 2px solid #ff0055;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(255, 0, 85, 0.4), inset 0 0 15px rgba(255, 0, 85, 0.15);
+      backdrop-filter: blur(8px);
+      overflow: hidden;
+    }
+
+    /* Terminal Header */
+    .terminal-header {
+      background: #1a0512;
+      border-bottom: 2px solid #ff0055;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ff3b30; box-shadow: 0 0 8px #ff3b30; }
+    .dot-yellow { background: #ffcc00; box-shadow: 0 0 8px #ffcc00; }
+    .dot-green { background: #34c759; box-shadow: 0 0 8px #34c759; }
+
+    .header-title {
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      color: #ff7597;
+      font-weight: 600;
+    }
+
+    /* Terminal Body */
+    .terminal-body {
+      padding: 24px;
+      min-height: 420px;
+      font-size: 0.98rem;
+      line-height: 1.8;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .log-line {
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+
+    .prompt {
+      color: #ff0055;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+
+    .text-green { color: #00ff66; text-shadow: 0 0 6px rgba(0, 255, 102, 0.5); }
+    .text-yellow { color: #ffd60a; }
+    .text-red { color: #ff0055; font-weight: 700; text-shadow: 0 0 8px rgba(255, 0, 85, 0.7); }
+    .text-white { color: #ffffff; }
+
+    /* Blinking Cursor */
+    .cursor {
+      display: inline-block;
+      width: 9px;
+      height: 17px;
+      background: #00ff66;
+      vertical-align: middle;
+      margin-left: 4px;
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* 3. CLIMAX: Giant Glowing Heart & Access Granted */
+    .climax-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 15px;
+      text-align: center;
+      animation: popIn 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .access-granted {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: #ff0055;
+      letter-spacing: 3px;
+      text-shadow: 0 0 15px #ff0055, 0 0 35px #ff0055, 0 0 50px #ff3377;
+      margin-bottom: 15px;
+      animation: pulseText 1.2s infinite alternate;
+    }
+
+    @keyframes pulseText {
+      0% { transform: scale(1); filter: brightness(1); }
+      100% { transform: scale(1.06); filter: brightness(1.3); }
+    }
+
+    /* 3D Pulsing Neon Heart */
+    .neon-heart {
+      width: 130px;
+      height: 130px;
+      margin: 10px 0;
+      fill: #ff0055;
+      filter: drop-shadow(0 0 25px #ff0055) drop-shadow(0 0 50px #ff0055);
+      animation: heartbeat 1.1s infinite;
+    }
+
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      15% { transform: scale(1.22); }
+      30% { transform: scale(1.02); }
+      45% { transform: scale(1.28); }
+      60% { transform: scale(1); }
+    }
+
+    /* Love Message Card */
+    .love-card {
+      background: rgba(255, 0, 85, 0.12);
+      border: 1px dashed #ff0055;
+      border-radius: 8px;
+      padding: 14px 20px;
+      margin-top: 15px;
+      color: #ffffff;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .love-highlight {
+      color: #ff0055;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-top: 6px;
+      display: block;
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.8);
+    }
+
+    /* Flying particle hearts */
+    .flying-heart {
+      position: fixed;
+      pointer-events: none;
+      font-size: 26px;
+      z-index: 99;
+      animation: floatHeart 2.8s ease-out forwards;
+    }
+
+    @keyframes floatHeart {
+      0% { opacity: 1; transform: translateY(0) scale(0.5); }
+      100% { opacity: 0; transform: translateY(-260px) scale(1.3) rotate(20deg); }
+    }
+
+    @media (max-width: 480px) {
+      .terminal-body { min-height: 380px; font-size: 0.86rem; padding: 16px; }
+      .access-granted { font-size: 1.6rem; }
+      .neon-heart { width: 100px; height: 100px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Matrix Background Canvas -->
+  <canvas id="matrixCanvas"></canvas>
+  <div class="scanlines"></div>
+
+  <!-- Cyber Hacker Window -->
+  <div class="terminal-card">
+    <div class="terminal-header">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <div class="header-title">HEART_EXPLOIT.SH [TARGET: CRUSH]</div>
+      <div style="font-size: 0.75rem; color: #ff0055; font-weight: 700;">LIVE HACK</div>
+    </div>
+
+    <div class="terminal-body" id="terminalBody">
+      <!-- Auto typing will output here -->
+    </div>
+  </div>
+
+  <script>
+    // 1. Matrix Rain Animation (Red & Green cyberpunk characters)
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const chars = '0123456789ABCDEFHIJKLMNOPQRSTUVWXYZアイウエオカキクケコサシスセソ❤️';
+    const fontSize = 16;
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = Array(columns).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(5, 2, 8, 0.1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#ff0055';
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+    setInterval(drawMatrix, 35);
+
+    // 2. Retro Beep Sound Effects (Web Audio API - No external mp3 required)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playBeep(freq = 600, duration = 0.04) {
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playClimaxSound() {
+      try {
+        [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+          setTimeout(() => playBeep(freq, 0.2), idx * 120);
+        });
+      } catch (e) {}
+    }
+
+    // 3. Automated Terminal Typing Sequence
+    const terminalBody = document.getElementById('terminalBody');
+
+    const sequence = [
+      { text: "./hack_target.sh --target='Crush' --override", type: "cmd", delay: 700 },
+      { text: "[+] Initializing Cyber Love Protocol...", type: "green", delay: 600 },
+      { text: "[*] Scanning Crush's personal defense firewall...", type: "yellow", delay: 700 },
+      { text: "[+] Defense system detected: 100% CUTE & DANGEROUS!", type: "green", delay: 800 },
+      { text: "[*] Bypassing security keys with Love Algorithm...", type: "yellow", delay: 700 },
+      { text: "Hacking into your heart... 99%", type: "hack99", delay: 1000 }
+    ];
+
+    async function runScript() {
+      await sleep(500);
+
+      for (const item of sequence) {
+        if (item.type === "cmd") {
+          await typeCommand(item.text);
+        } else if (item.type === "hack99") {
+          await runHack99();
+        } else {
+          await printLine(item.text, item.type === "green" ? "text-green" : "text-yellow");
+        }
+        await sleep(item.delay);
+      }
+
+      // Finish & trigger Climax
+      showClimax();
+    }
+
+    function sleep(ms) {
+      return new Promise(r => setTimeout(r, ms));
+    }
+
+    function typeCommand(cmd) {
+      return new Promise(resolve => {
+        const line = document.createElement('div');
+        line.className = 'log-line text-white';
+        line.innerHTML = `<span class="prompt">root@cyber:~$</span><span class="cmd-text"></span><span class="cursor"></span>`;
+        terminalBody.appendChild(line);
+
+        const cmdSpan = line.querySelector('.cmd-text');
+        const cursor = line.querySelector('.cursor');
+        let i = 0;
+
+        const timer = setInterval(() => {
+          if (i < cmd.length) {
+            cmdSpan.textContent += cmd[i];
+            playBeep(500 + Math.random() * 200, 0.03);
+            i++;
+          } else {
+            clearInterval(timer);
+            cursor.remove();
+            resolve();
+          }
+        }, 40);
+      });
+    }
+
+    function printLine(text, cssClass) {
+      return new Promise(resolve => {
+        const line = document.createElement('div');
+        line.className = `log-line ${cssClass}`;
+        line.textContent = text;
+        terminalBody.appendChild(line);
+        playBeep(750, 0.03);
+        resolve();
+      });
+    }
+
+    // "Hacking into your heart... 99%" count-up animation
+    function runHack99() {
+      return new Promise(resolve => {
+        const line = document.createElement('div');
+        line.className = 'log-line text-red';
+        terminalBody.appendChild(line);
+
+        let percent = 0;
+        const timer = setInterval(() => {
+          percent += 11;
+          if (percent > 99) percent = 99;
+          line.textContent = `[!] Hacking into your heart... ${percent}%`;
+          playBeep(600 + percent * 6, 0.03);
+
+          if (percent === 99) {
+            clearInterval(timer);
+            setTimeout(() => {
+              line.textContent = `[!] Hacking into your heart... 100% [COMPLETED!]`;
+              resolve();
+            }, 600);
+          }
+        }, 90);
+      });
+    }
+
+    // 4. Climax Reveal (Access Granted & Neon Heart)
+    function showClimax() {
+      playClimaxSound();
+      triggerFloatingHearts();
+
+      const climax = document.createElement('div');
+      climax.className = 'climax-container';
+      climax.style.display = 'flex';
+
+      climax.innerHTML = `
+        <div class="access-granted">⚡ ACCESS GRANTED! ❤️ ⚡</div>
+
+        <!-- Pulsing SVG Neon Heart -->
+        <svg class="neon-heart" viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+
+        <div class="love-card">
+          <p>[ SYSTEM OVERRIDE SUCCESS ]</p>
+          <span class="love-highlight">ငါ့ရဲ့ အသည်းနှလုံးတစ်ခုလုံးကို မင်းက အပိုင်သိမ်းသွားပါပြီ ❤️</span>
+        </div>
+      `;
+
+      terminalBody.appendChild(climax);
+    }
+
+    function triggerFloatingHearts() {
+      const hearts = ['❤️', '💖', '💘', '💕', '✨'];
+      for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+          const h = document.createElement('div');
+          h.className = 'flying-heart';
+          h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+          h.style.left = `${15 + Math.random() * 70}vw`;
+          h.style.top = `${65 + Math.random() * 25}vh`;
+          document.body.appendChild(h);
+          setTimeout(() => h.remove(), 2800);
+        }, i * 80);
+      }
+    }
+
+    // Start auto typing on page load
+    window.onload = runScript;
+  </script>
+</body>
+</html>

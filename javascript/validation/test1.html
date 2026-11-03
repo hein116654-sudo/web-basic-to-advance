@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+</head>
+
+<body>
+
+    <form name="myform" method="post" action="abc.jsp" onsubmit="return validateform(event)">
+
+        Name:
+        <input type="text" name="name">
+        <br><br>
+        Password:
+        <input type="password" name="password">
+        <br><br>
+
+        <input type="submit" value="Register">
+
+    </form>
+
+    <script>
+
+        function validateform(event) {
+
+            // Get form values
+            var name = document.myform.name.value;
+            var password = document.myform.password.value;
+
+            // Name validation
+            if (name == null || name == "") {
+                alert("Name can't be blank");
+                return false;
+            }
+
+            // Password validation
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters long.");
+                return false;
+            }
+
+            // Validation successful
+            alert("Successfully registered!");
+
+            // Prevent form from submitting for this demo
+            event.preventDefault();
+
+            return true;
+        }
+
+    </script>
+
+</body>
+
+</html>

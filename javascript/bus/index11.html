@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Apology & Hug Machine 🫂</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Glassmorphism Card */
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            z-index: 10;
+            transition: all 0.5s ease;
+        }
+
+        .avatar {
+            font-size: 60px;
+            margin-bottom: 15px;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h2 {
+            color: #d63384;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+        }
+
+        #yesBtn:hover {
+            background-color: #ff1e42;
+            transform: scale(1.05);
+        }
+
+        #hugBtn {
+            background-color: #6c757d;
+            color: white;
+            position: relative;
+        }
+
+        #hugBtn:hover {
+            background-color: #495057;
+            transform: scale(1.05);
+        }
+
+        /* Success Screen Style */
+        .success-screen {
+            display: none;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .success-screen h1 {
+            color: #ff3366;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .success-screen p {
+            color: #444;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Floating Stickers / Confetti Animation */
+        .floating-emoji {
+            position: absolute;
+            font-size: 24px;
+            animation: riseUp 3s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes riseUp {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Card -->
+    <div class="card" id="mainCard">
+        <div class="avatar" id="avatarEmoji">🥺</div>
+        <h2>စိတ်ဆိုးနေတုန်းပဲလားဟင်?</h2>
+        <p>“ကိုယ့်ဘက်က မှားသွားလို့ တောင်းပန်ပါတယ်နော်... စိတ်ဆိုးပြေတော့နွှာ 🥰”</p>
+        <div class="btn-group">
+            <button id="yesBtn">စိတ်ဆိုးတယ် 😤</button>
+            <button id="hugBtn">Virtual Hug 🫂</button>
+        </div>
+    </div>
+
+    <!-- Success Screen (Hidden Initially) -->
+    <div class="card success-screen" id="successCard">
+        <div class="avatar">🤗💖</div>
+        <h1>ယေး! စိတ်ပြေသွားပြီ 😊</h1>
+        <p>“ကျေးဇူးပါ ရွှေဥက္ကူလေးရေ... နောက်ဘက်ကို စိတ်မကောက်နဲ့တော့နော် ❤️✨”</p>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const hugBtn = document.getElementById('hugBtn');
+        const mainCard = document.getElementById('mainCard');
+        const successCard = document.getElementById('successCard');
+        const avatarEmoji = document.getElementById('avatarEmoji');
+
+        // When they try to click "Yes (Still Mad)", the button runs away or changes text playfully!
+        let clickCount = 0;
+        const messages = [
+            "မဆိုးနဲ့တော့ပါဘူးနော် 🥺", 
+            "ဟင့်အင်း ခွင့်လွှတ်လိုက်တော့ 🫂", 
+            "မရဘူး Hug ခလုတ်ပဲ နှိပ်ရမယ် 😄"
+        ];
+
+        yesBtn.addEventListener('mouseover', () => {
+            // Runaway effect on desktop hover
+            const x = Math.random() * 120 - 60;
+            const y = Math.random() * 80 - 40;
+            yesBtn.style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        yesBtn.addEventListener('click', () => {
+            clickCount++;
+            if (clickCount < messages.length) {
+                yesBtn.innerText = messages[clickCount];
+                avatarEmoji.innerText = "😭";
+            } else {
+                yesBtn.style.display = 'none'; // Hide yes button completely after persistence
+            }
+        });
+
+        // When they click Virtual Hug -> Success!
+        hugBtn.addEventListener('click', () => {
+            mainCard.style.display = 'none';
+            successCard.style.display = 'block';
+            startFloatingEmojis();
+        });
+
+        // Function to generate floating hearts and hugs
+        function startFloatingEmojis() {
+            const emojis = ['🫂', '❤️', '✨', '💖', '🥰', '🌸', '🤗'];
+            setInterval(() => {
+                const span = document.createElement('div');
+                span.classList.add('floating-emoji');
+                span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                span.style.left = Math.random() * window.innerWidth + 'px';
+                span.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(span);
+
+                setTimeout(() => {
+                    span.remove();
+                }, 3000);
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>

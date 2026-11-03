@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ပျော်ရွှင်ဖွယ် သီတင်းကျွတ် မီးထွန်းပွဲတော် 🏮🌕</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #020410;
+            font-family: "Noto Sans Myanmar", 'Pyidaungsu', sans-serif;
+            color: #ffffff;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #app {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Ambient Glow & Mist */
+        .ambient-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            background: radial-gradient(circle at 50% 10%, rgba(255, 200, 100, 0.08), transparent 45%),
+                        radial-gradient(circle at 50% 100%, rgba(255, 120, 40, 0.12), transparent 50%);
+        }
+
+        /* Top Header */
+        .header {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            text-align: center;
+            pointer-events: none;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .header h1 {
+            font-size: clamp(22px, 4vw, 32px);
+            font-weight: 800;
+            color: #ffe89e;
+            text-shadow: 0 0 15px rgba(255, 180, 50, 0.8), 0 0 30px rgba(255, 120, 0, 0.4);
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            font-size: 13px;
+            color: rgba(255, 235, 190, 0.75);
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Control Bottom Bar */
+        .bottom-bar {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.85), rgba(220, 50, 5, 0.85));
+            color: #fff;
+            border: 1.5px solid rgba(255, 220, 130, 0.6);
+            padding: 13px 26px;
+            border-radius: 50px;
+            font-family: "Noto Sans Myanmar", sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(255, 100, 0, 0.4), inset 0 0 15px rgba(255, 230, 150, 0.3);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 120, 0, 0.6);
+        }
+
+        .action-btn:active {
+            transform: scale(0.96);
+        }
+
+        .hint-text {
+            position: fixed;
+            bottom: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            pointer-events: none;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        /* Wish Popup Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(1, 4, 18, 0.75);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: linear-gradient(145deg, rgba(35, 20, 10, 0.95), rgba(15, 8, 28, 0.95));
+            border: 2px solid rgba(255, 180, 70, 0.6);
+            border-radius: 28px;
+            padding: 30px 25px;
+            width: 420px;
+            max-width: 95%;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(255, 100, 0, 0.3), inset 0 0 25px rgba(255, 150, 0, 0.15);
+            animation: modalIn 0.35s ease-out;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.85) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-card h2 {
+            font-size: 22px;
+            color: #ffd166;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .modal-card p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .wish-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(255, 190, 90, 0.4);
+            border-radius: 16px;
+            padding: 14px 18px;
+            color: #ffffff;
+            font-family: "Noto Sans Myanmar", sans-serif;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .wish-input:focus {
+            border-color: #ffaa00;
+            box-shadow: 0 0 15px rgba(255, 170, 0, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ddd;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .btn-release {
+            background: linear-gradient(135deg, #ff8800, #ff3700);
+            color: white;
+            border: none;
+            padding: 11px 26px;
+            border-radius: 30px;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 80, 0, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 20px; }
+            .action-btn { padding: 11px 20px; font-size: 13.5px; }
+            .hint-text { bottom: 80px; font-size: 11px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="app"></div>
+<div class="ambient-overlay"></div>
+
+<!-- HEADER -->
+<div class="header">
+    <h1>🏮 ပျော်ရွှင်ဖွယ် သီတင်းကျွတ် မီးထွန်းပွဲတော် 🌕</h1>
+    <p>မီးပုံးပျံလွှတ်တင်ရင်း ကောင်းမွန်သော ဆုတောင်းများ ပြည့်စုံကြပါစေ</p>
+</div>
+
+<div class="hint-text">✨ Screen ပေါ်ကို နှိပ်ပြီး မီးရှူးမီးပန်းများ ပစ်ဖောက်နိုင်ပါသည် ✨</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+    <button class="action-btn" onclick="openWishModal()">
+        🏮 ဆုတောင်းပြီး မီးပုံးပျံလွှတ်မယ်
+    </button>
+</div>
+
+<!-- WISH MODAL -->
+<div class="modal-overlay" id="wishModal" onclick="closeWishModal(event)">
+    <div class="modal-card">
+        <h2>🏮 မီးပုံးပျံတွင် ဆုတောင်းရေးမည်</h2>
+        <p>သီတင်းကျွတ်လပြည့်ညမှာ ချစ်ရသူများနှင့် မိသားစုအတွက် ဆုတောင်းစကား ရေးသားလွှတ်တင်လိုက်ပါ...</p>
+        <input type="text" id="wishInput" class="wish-input" placeholder="ဆုတောင်းစကားရေးပါ (ဥပမာ- အစစအရာရာ အဆင်ပြေပါစေ ❤️)" maxlength="50">
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="toggleModal(false)">ပိတ်မည်</button>
+            <button class="btn-release" onclick="confirmReleaseWish()">လွှတ်တင်မည် 🚀</button>
+        </div>
+    </div>
+</div>
+
+<!-- THREE.JS & POSTPROCESSING IMPORT -->
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+    }
+}
+</script>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+
+/* =========================================================
+   1. SCENE, CAMERA & RENDERER
+========================================================= */
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x020412);
+scene.fog = new THREE.FogExp2(0x030616, 0.012);
+
+const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 2, 20);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.25;
+document.getElementById("app").appendChild(renderer.domElement);
+
+/* =========================================================
+   2. BLOOM EFFECT (နူးညံ့တောက်ပသော မီးပုံးရောင်စဥ်)
+========================================================= */
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+
+const bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(window.innerWidth, window.innerHeight),
+    1.1,  // Strength
+    0.6,  // Radius
+    0.2   // Threshold
+);
+composer.addPass(bloomPass);
+
+/* =========================================================
+   3. ORBIT CONTROLS
+========================================================= */
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.minDistance = 8;
+controls.maxDistance = 45;
+controls.maxPolarAngle = Math.PI / 2 + 0.1; // မြေပြင်အောက်မရောက်စေရန်
+controls.target.set(0, 6, 0);
+
+/* =========================================================
+   4. LIGHTS
+========================================================= */
+const moonLight = new THREE.DirectionalLight(0xbdd5ff, 1.2);
+moonLight.position.set(10, 25, -20);
+scene.add(moonLight);
+
+const ambientLight = new THREE.AmbientLight(0x1a2238, 1.5);
+scene.add(ambientLight);
+
+/* =========================================================
+   5. 3D GLOWING FULL MOON (သီတင်းကျွတ် လပြည့်ဝန်းကြီး)
+========================================================= */
+const moonGroup = new THREE.Group();
+moonGroup.position.set(8, 22, -35);
+scene.add(moonGroup);
+
+const moonGeom = new THREE.SphereGeometry(4.5, 32, 32);
+const moonMat = new THREE.MeshBasicMaterial({ color: 0xfff6cf });
+const moonMesh = new THREE.Mesh(moonGeom, moonMat);
+moonGroup.add(moonMesh);
+
+// Moon Halo / Glow Sprite
+function createMoonHalo() {
+    const canvas = document.createElement("canvas");
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    const grad = ctx.createRadialGradient(128, 128, 40, 128, 128, 128);
+    grad.addColorStop(0, "rgba(255, 240, 190, 0.85)");
+    grad.addColorStop(0.4, "rgba(255, 200, 100, 0.35)");
+    grad.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 256, 256);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    const spriteMat = new THREE.SpriteMaterial({
+        map: texture,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+    });
+    const sprite = new THREE.Sprite(spriteMat);
+    sprite.scale.set(22, 22, 1);
+    return sprite;
+}
+moonGroup.add(createMoonHalo());
+
+/* =========================================================
+   6. STARRY NIGHT & FLOATING SPARKS (ကြယ်ရောင်စုံ ညကောင်းကင်)
+========================================================= */
+const starCount = 2500;
+const starPos = new Float32Array(starCount * 3);
+for (let i = 0; i < starCount; i++) {
+    const i3 = i * 3;
+    const r = 40 + Math.random() * 80;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    starPos[i3] = r * Math.sin(phi) * Math.cos(theta);
+    starPos[i3 + 1] = Math.abs(r * Math.sin(phi) * Math.sin(theta)); // ကောင်းကင်အပေါ်ပိုင်း
+    starPos[i3 + 2] = r * Math.cos(phi);
+}
+const starGeom = new THREE.BufferGeometry();
+starGeom.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
+const stars = new THREE.Points(starGeom, new THREE.PointsMaterial({
+    color: 0xffffff,
+    size: 0.08,
+    transparent: true,
+    opacity: 0.85
+}));
+scene.add(stars);
+
+/* =========================================================
+   7. 3D SKY LANTERNS (မီးပုံးပျံများ ဖန်တီးခြင်း)
+========================================================= */
+const lanternsGroup = new THREE.Group();
+scene.add(lanternsGroup);
+
+function createLanternMesh(wishText = "") {
+    const group = new THREE.Group();
+
+    // မီးပုံးကိုယ်ထည် (Sky Lantern Body)
+    const lanternGeom = new THREE.CylinderGeometry(0.55, 0.38, 1.4, 16, 4, true);
+    const lanternMat = new THREE.MeshStandardMaterial({
+        color: 0xff8c1a,
+        emissive: 0xff5a00,
+        emissiveIntensity: 1.2,
+        roughness: 0.3,
+        side: THREE.DoubleSide
+    });
+    const lanternBody = new THREE.Mesh(lanternGeom, lanternMat);
+    lanternBody.position.y = 0.7;
+    group.add(lanternBody);
+
+    // အလယ်က မီးတောက် (Inner Flame Light)
+    const flameGeom = new THREE.SphereGeometry(0.16, 8, 8);
+    const flameMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const flame = new THREE.Mesh(flameGeom, flameMat);
+    flame.position.y = 0.4;
+    group.add(flame);
+
+    // Warm Glow Sprite
+    const canvas = document.createElement("canvas");
+    canvas.width = 128;
+    canvas.height = 128;
+    const ctx = canvas.getContext("2d");
+    const grad = ctx.createRadialGradient(64, 64, 10, 64, 64, 64);
+    grad.addColorStop(0, "rgba(255, 240, 150, 0.95)");
+    grad.addColorStop(0.5, "rgba(255, 110, 20, 0.4)");
+    grad.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 128, 128);
+
+    const glowTexture = new THREE.CanvasTexture(canvas);
+    const glowSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: glowTexture,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+    }));
+    glowSprite.scale.set(3.8, 3.8, 1);
+    glowSprite.position.y = 0.7;
+    group.add(glowSprite);
+
+    // ဆုတောင်းစာသားပါဝင်ပါက မီးပုံးအပေါ်တွင် Text Card ချိတ်တွဲခြင်း
+    if (wishText.trim() !== "") {
+        const textCanvas = document.createElement("canvas");
+        const tctx = textCanvas.getContext("2d");
+        textCanvas.width = 512;
+        textCanvas.height = 128;
+        tctx.textAlign = "center";
+        tctx.textBaseline = "middle";
+        tctx.font = "bold 32px 'Noto Sans Myanmar', sans-serif";
+        tctx.fillStyle = "#ffffff";
+        tctx.shadowColor = "rgba(255, 120, 0, 0.9)";
+        tctx.shadowBlur = 12;
+        tctx.fillText(wishText, 256, 64);
+
+        const textTexture = new THREE.CanvasTexture(textCanvas);
+        const textSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+            map: textTexture,
+            transparent: true,
+            depthWrite: false
+        }));
+        textSprite.scale.set(3.5, 0.88, 1);
+        textSprite.position.y = 2.0;
+        group.add(textSprite);
+    }
+
+    return group;
+}
+
+// မူလအလှဆင် မီးပုံးပျံ အလုံး ၄၀ ထည့်သွင်းခြင်း
+const defaultWishes = [
+    "စိတ်ချမ်းသာ ကိုယ်ကျန်းမာပါစေ ✨",
+    "လိုအင်ဆန္ဒတွေ ပြည့်ဝပါစေ 🏮",
+    "ချစ်ရသူနဲ့ အမြဲတမ်း ပျော်ရွှင်ပါစေ ❤️",
+    "ကပ်ဘေးအန္တရာယ် ကင်းဝေးပါစေ 🙏",
+    "အောင်မြင်မှုတွေ ပိုင်ဆိုင်ပါစေ 🌟"
+];
+
+const floatingLanterns = [];
+
+function spawnLantern(x, y, z, wish = "", isUser = false) {
+    const lantern = createLanternMesh(wish);
+    lantern.position.set(x, y, z);
+    
+    // Scale random
+    const scale = isUser ? 1.3 : (0.7 + Math.random() * 0.6);
+    lantern.scale.set(scale, scale, scale);
+
+    lantern.userData = {
+        floatSpeed: 0.02 + Math.random() * 0.025,
+        swaySpeed: 0.8 + Math.random() * 0.8,
+        swayRange: 0.008 + Math.random() * 0.008,
+        offset: Math.random() * Math.PI * 2,
+        isUser: isUser
+    };
+
+    lanternsGroup.add(lantern);
+    floatingLanterns.push(lantern);
+    return lantern;
+}
+
+// အစပျိုး မီးပုံးများ မိုးပေါ်လွှင့်တင်ထားခြင်း
+for (let i = 0; i < 35; i++) {
+    const x = (Math.random() - 0.5) * 40;
+    const y = Math.random() * 30 - 2;
+    const z = (Math.random() - 0.5) * 40;
+    const wish = Math.random() < 0.3 ? defaultWishes[Math.floor(Math.random() * defaultWishes.length)] : "";
+    spawnLantern(x, y, z, wish);
+}
+
+/* =========================================================
+   8. INTERACTIVE FIREWORKS (မီးရှူးမီးပန်း အသံနှင့် Animation)
+========================================================= */
+const fireworkBursts = [];
+
+function createFirework(x, y, z) {
+    playFireworkSound();
+
+    const particleCount = 180;
+    const positions = new Float32Array(particleCount * 3);
+    const velocities = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+
+    const hue = Math.random();
+    const baseColor = new THREE.Color().setHSL(hue, 1.0, 0.6);
+
+    for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+        positions[i3] = x;
+        positions[i3 + 1] = y;
+        positions[i3 + 2] = z;
+
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const speed = 0.08 + Math.random() * 0.22;
+
+        velocities[i3] = speed * Math.sin(phi) * Math.cos(theta);
+        velocities[i3 + 1] = speed * Math.sin(phi) * Math.sin(theta);
+        velocities[i3 + 2] = speed * Math.cos(phi);
+
+        colors[i3] = baseColor.r;
+        colors[i3 + 1] = baseColor.g;
+        colors[i3 + 2] = baseColor.b;
+    }
+
+    const geom = new THREE.BufferGeometry();
+    geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geom.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+    const mat = new THREE.PointsMaterial({
+        size: 0.12,
+        transparent: true,
+        opacity: 1,
+        vertexColors: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+    });
+
+    const firework = new THREE.Points(geom, mat);
+    firework.userData = { velocities: velocities, life: 1.0 };
+    scene.add(firework);
+    fireworkBursts.push(firework);
+}
+
+// Web Audio API ဖြင့် မီးရှူးမီးပန်း အသံဖန်တီးခြင်း
+let audioCtx;
+function playFireworkSound() {
+    try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.35);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.36);
+    } catch(e) {}
+}
+
+// Screen Click ဖြင့် မီးရှူးမီးပန်း ဖောက်ခြင်း
+let isPointerDragging = false;
+let startX = 0, startY = 0;
+
+renderer.domElement.addEventListener("pointerdown", (e) => {
+    isPointerDragging = false;
+    startX = e.clientX;
+    startY = e.clientY;
+});
+
+renderer.domElement.addEventListener("pointermove", (e) => {
+    if (Math.abs(e.clientX - startX) > 6 || Math.abs(e.clientY - startY) > 6) {
+        isPointerDragging = true;
+    }
+});
+
+renderer.domElement.addEventListener("pointerup", (e) => {
+    if (!isPointerDragging && e.clientY < window.innerHeight - 100) {
+        // Click နေရာအလိုက် 3D နေရာသို့ တွက်ချက်ဖောက်ပေးခြင်း
+        const vector = new THREE.Vector3(
+            (e.clientX / window.innerWidth) * 2 - 1,
+            -(e.clientY / window.innerHeight) * 2 + 1,
+            0.5
+        );
+        vector.unproject(camera);
+        const dir = vector.sub(camera.position).normalize();
+        const distance = 18;
+        const pos = camera.position.clone().add(dir.multiplyScalar(distance));
+        createFirework(pos.x, pos.y, pos.z);
+    }
+});
+
+/* =========================================================
+   9. USER WISH LANTERN RELEASE
+========================================================= */
+window.toggleModal = function(show) {
+    document.getElementById("wishModal").style.display = show ? "flex" : "none";
+    if (show) document.getElementById("wishInput").focus();
+};
+
+window.openWishModal = function() {
+    window.toggleModal(true);
+};
+
+window.closeWishModal = function(e) {
+    if (e.target.id === "wishModal") window.toggleModal(false);
+};
+
+window.confirmReleaseWish = function() {
+    const input = document.getElementById("wishInput");
+    const wish = input.value.trim() || "ဆုတောင်းပြည့်ဝပါစေ ✨🏮";
+    input.value = "";
+    window.toggleModal(false);
+
+    // အသုံးပြုသူရှေ့တည့်တည့်မှ မီးပုံးပျံ လွှတ်တင်ခြင်း
+    const spawnPos = camera.position.clone().add(camera.getWorldDirection(new THREE.Vector3()).multiplyScalar(8));
+    spawnPos.y -= 3;
+    const userLantern = spawnLantern(spawnPos.x, spawnPos.y, spawnPos.z, wish, true);
+    userLantern.userData.floatSpeed = 0.055; // အပေါ်သို့ မြန်မြန်တက်သွားစေခြင်း
+
+    // Confetti Fireworks Burst
+    confetti({
+        particleCount: 120,
+        spread: 70,
+        origin: { y: 0.8 },
+        colors: ['#ff9900', '#ff3300', '#ffd700', '#ffffff']
+    });
+
+    createFirework(spawnPos.x, spawnPos.y + 5, spawnPos.z);
+};
+
+/* =========================================================
+   10. MAIN ANIMATION LOOP
+========================================================= */
+const clock = new THREE.Clock();
+
+function animate() {
+    requestAnimationFrame(animate);
+    const time = clock.getElapsedTime();
+
+    // မီးပုံးပျံများ အပေါ်သို့ တဖြည်းဖြည်း လွင့်တက်ခြင်းနှင့် လေတိုက်ခတ်မှု
+    floatingLanterns.forEach((lantern) => {
+        lantern.position.y += lantern.userData.floatSpeed;
+        lantern.position.x += Math.sin(time * lantern.userData.swaySpeed + lantern.userData.offset) * lantern.userData.swayRange;
+        lantern.position.z += Math.cos(time * lantern.userData.swaySpeed + lantern.userData.offset) * lantern.userData.swayRange;
+        lantern.rotation.y = Math.sin(time * 0.5 + lantern.userData.offset) * 0.15;
+
+        // အပေါ်သို့ အလွန်မြင့်သွားပါက အောက်မှ ပြန်စတင်ခြင်း
+        if (lantern.position.y > 38) {
+            lantern.position.y = -4;
+            lantern.position.x = (Math.random() - 0.5) * 40;
+            lantern.position.z = (Math.random() - 0.5) * 40;
+        }
+    });
+
+    // မီးရှူးမီးပန်းများ ကာလသတ်မှတ်ချက်နှင့် ရွေ့လျားမှု
+    for (let i = fireworkBursts.length - 1; i >= 0; i--) {
+        const fw = fireworkBursts[i];
+        fw.userData.life -= 0.016;
+        const pos = fw.geometry.attributes.position.array;
+        const vel = fw.userData.velocities;
+
+        for (let j = 0; j < pos.length; j += 3) {
+            pos[j] += vel[j];
+            pos[j + 1] += vel[j + 1];
+            pos[j + 2] += vel[j + 2];
+            vel[j + 1] -= 0.0025; // Gravity ဆွဲအား
+        }
+        fw.geometry.attributes.position.needsUpdate = true;
+        fw.material.opacity = fw.userData.life;
+
+        if (fw.userData.life <= 0) {
+            scene.remove(fw);
+            fw.geometry.dispose();
+            fw.material.dispose();
+            fireworkBursts.splice(i, 1);
+        }
+    }
+
+    // ကြယ်များ ဖြည်းညင်းစွာ လည်ပတ်ခြင်း
+    stars.rotation.y = time * 0.002;
+
+    controls.update();
+    composer.render();
+}
+
+animate();
+
+/* =========================================================
+   11. RESIZE EVENT
+========================================================= */
+window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    composer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+
+</body>
+</html>

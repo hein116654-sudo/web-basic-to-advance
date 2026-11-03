@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Hi Crush လေးရေ 🥺💖</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffd3e2 0%, #ffb8d2 50%, #fbc2eb 100%);
+      font-family: 'Plus Jakarta Sans', 'Padauk', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      overflow-x: hidden;
+      color: #4a2839;
+    }
+
+    /* TikTok Mobile Frame (9:16 Aspect Look) */
+    .app-card {
+      width: 100%;
+      max-width: 410px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 3px solid #ffffff;
+      border-radius: 36px;
+      padding: 28px 20px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(237, 67, 136, 0.28);
+      position: relative;
+    }
+
+    .screen {
+      display: none;
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.92) translateY(15px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 16px;
+      background: #ffe3ee;
+      color: #ed4388;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      border: 1px solid rgba(237, 67, 136, 0.2);
+    }
+
+    h1 {
+      font-size: clamp(22px, 6vw, 27px);
+      font-weight: 800;
+      color: #d63372;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+
+    .sub-text {
+      font-size: 15px;
+      color: #7b435b;
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+
+    /* GIF Frame Styling */
+    .gif-frame {
+      width: 200px;
+      height: 200px;
+      margin: 8px auto 18px;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 4px solid #ffffff;
+      box-shadow: 0 10px 25px rgba(237, 67, 136, 0.25);
+      background: #fff;
+    }
+
+    .gif-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Primary Button */
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, #ff5d9e, #ed4388);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 15px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(237, 67, 136, 0.35);
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .pulse {
+      animation: pulseBtn 1.8s infinite;
+    }
+
+    @keyframes pulseBtn {
+      0% { box-shadow: 0 0 0 0 rgba(237, 67, 136, 0.5); }
+      70% { box-shadow: 0 0 0 16px rgba(237, 67, 136, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(237, 67, 136, 0); }
+    }
+
+    /* ==============================================
+       SCREEN 2: YES & NO BUTTON CONTROLS
+       ============================================== */
+    .button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+      min-height: 70px;
+      position: relative;
+      flex-wrap: wrap;
+    }
+
+    .btn-yes {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 14px 28px;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 65, 108, 0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      white-space: nowrap;
+    }
+
+    .btn-no {
+      background: #f1f5f9;
+      color: #64748b;
+      border: 2px solid #cbd5e1;
+      border-radius: 25px;
+      padding: 14px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .btn-no:active {
+      transform: scale(0.9);
+    }
+
+    /* Screen 3 Result Box */
+    .couple-card {
+      background: linear-gradient(135deg, #fff0f6, #ffe0ec);
+      border: 2px dashed #ff99bb;
+      border-radius: 24px;
+      padding: 18px 14px;
+      margin-bottom: 18px;
+    }
+
+    .couple-title {
+      font-family: 'Caveat', cursive;
+      font-size: 34px;
+      color: #ed4388;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .date-tag {
+      font-size: 13px;
+      color: #8c556f;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="app-card">
+
+    <!-- ==============================================
+         STEP 1: HI CRUSH INTRO
+         ============================================== -->
+    <section class="screen active" id="screen1">
+      <div class="badge">A SECRET FOR YOU 💌</div>
+      <h1>Hi Crush လေးရေ 🥺💗</h1>
+
+      <div class="gif-frame">
+        <!-- GIF 1 Provided -->
+        <img src="https://media.tenor.com/uBQM6iJ_hsgAAAAM/hug-cute.gif" alt="Cute Hug GIF 1">
+      </div>
+
+      <p class="sub-text">
+        ကိုယ့်ရင်ထဲမှာ သိမ်းထားရတာ ကြာပြီဖြစ်တဲ့<br>
+        စကားလေးတစ်ခု ဖွင့်ပြောစရာ ရှိလို့ပါနော်...<br>
+        စိတ်ရှည်ရှည်နဲ့ နားထောင်ပေးမလား? 🥺
+      </p>
+
+      <button class="btn pulse" onclick="goToScreen(2)">
+        ပြော 👀👉
+      </button>
+    </section>
+
+    <!-- ==============================================
+         STEP 2: CONFESSION (အင်း & ငြင်းတယ် BUTTONS)
+         ============================================== -->
+    <section class="screen" id="screen2">
+      <div class="badge">MY CONFESSION 💖</div>
+      <h1>ကိုယ့်ရဲ့ စကားသံလေး 🥺</h1>
+
+      <div class="gif-frame">
+        <!-- GIF 2 Provided (Pochacco Twerk) -->
+        <img src="https://media1.tenor.com/m/hTCUTQ31ms0AAAAd/twerk-pochacco.gif" alt="Pochacco Dancing GIF 2">
+      </div>
+
+      <p class="sub-text" id="confessText">
+        မင်းလေးကို သဘောကျရင်း ကျရင်း...<br>
+        တကယ် ချစ်မိလာပြီကွယ် 🥺💗<br>
+        <b>ကိုယ့်ရဲ့ အချစ်ကို လက်ခံပေးနိုင်မလား?</b>
+      </p>
+
+      <div class="button-group">
+        <!-- YES BUTTON (ကြီးလာပြီး စာသားပြောင်းမည့်ခလုတ်) -->
+        <button class="btn-yes" id="yesBtn" onclick="acceptLove()">
+          အင်း 💖
+        </button>
+
+        <!-- NO BUTTON (သေးသွားပြီး ပျောက်သွားမည့်ခလုတ်) -->
+        <button class="btn-no" id="noBtn" onclick="rejectLove()">
+          ငြင်းတယ် 🥺
+        </button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         STEP 3: SUCCESS (HUGGING BEARS GIF)
+         ============================================== -->
+    <section class="screen" id="screen3">
+      <div class="badge">YAYYY! IT'S OFFICIAL 🥳❤️</div>
+      <h1>ချစ်သူ ဖြစ်သွားပါပြီ! 🥰</h1>
+
+      <div class="gif-frame">
+        <!-- GIF 3 Provided (Ositos Bears) -->
+        <img src="https://media1.tenor.com/m/FiPR0eAWZokAAAAd/ositos.gif" alt="Hugging Bears GIF 3">
+      </div>
+
+      <div class="couple-card">
+        <div class="couple-title">You & Me Forever 💕</div>
+        <p class="sub-text" style="margin-bottom: 8px;">
+          လက်ခံပေးလို့ ကျေးဇူးပါနော် အသဲလေးရေ 🥺💗<br>
+          ဒီနေ့ကစပြီး တစ်သက်လုံး ရင်ခွင်ထဲမှာ<br>
+          အလိုလိုက်ပြီး အများကြီး ချစ်သွားပါ့မယ်နော် ❤️
+        </p>
+        <span class="date-tag">🗓️ တရားဝင် ချစ်သူစတင်သည့်နေ့ ✨</span>
+      </div>
+
+      <button class="btn pulse" onclick="celebrateExtra()">
+        အရမ်းချစ်တယ်နော် အသဲလေးရေ ❤️
+      </button>
+    </section>
+
+  </main>
+
+  <script>
+    // Audio Context (Cute Chimes & Pops)
+    let audioCtx = null;
+    function playTone(freq, duration) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    // Screen Switching
+    function goToScreen(screenNumber) {
+      playTone(650, 0.1);
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen' + screenNumber).classList.add('active');
+    }
+
+    // ==============================================
+    // REJECT & ACCEPT LOGIC (၄ ကြိမ် ညှာတာမှု)
+    // ==============================================
+    let noClickCount = 0;
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+
+    // "အင်း" ခလုတ်ပေါ်မှာ တစ်လှည့်စီ ပြောင်းမည့် ချစ်စရာစာသားများ
+    const yesTexts = [
+      "တကယ် မချစ်ဘူးလား 🥺",
+      "သေချာ စဉ်းစားပါဦးနော် 😭",
+      "ခဏလေး အင်း လို့ပဲ ပြောပါနော် 🥹",
+      "အင်း ပဲ ရွေးလိုက်ပါတော့ကွာ ❤️"
+    ];
+
+    function rejectLove() {
+      noClickCount++;
+      playTone(400, 0.08);
+
+      if (noClickCount <= 4) {
+        // ၁။ "အင်း" ခလုတ်ကို ပိုကြီးအောင် လုပ်ခြင်း
+        const newFontSize = 17 + (noClickCount * 4); // 21px, 25px, 29px, 33px
+        const newPaddingY = 14 + (noClickCount * 4);
+        const newPaddingX = 28 + (noClickCount * 6);
+        
+        yesBtn.style.fontSize = newFontSize + 'px';
+        yesBtn.style.padding = `${newPaddingY}px ${newPaddingX}px`;
+        yesBtn.innerHTML = yesTexts[noClickCount - 1];
+
+        // ၂။ "ငြင်းတယ်" ခလုတ်ကို တဖြည်းဖြည်း သေးသွားစေခြင်း
+        const noScale = 1 - (noClickCount * 0.2); // 0.8, 0.6, 0.4
+        noBtn.style.transform = `scale(${noScale})`;
+      }
+
+      // ၄ ကြိမ် ပြည့်သွားပါက "ငြင်းတယ်" ခလုတ် လုံးဝ ပျောက်ကွယ်သွားခြင်း
+      if (noClickCount >= 4) {
+        noBtn.style.display = 'none';
+        yesBtn.style.width = '100%';
+        yesBtn.style.borderRadius = '28px';
+      }
+    }
+
+    function acceptLove() {
+      goToScreen(3);
+      playTone(950, 0.35);
+
+      confetti({
+        particleCount: 120,
+        spread: 85,
+        origin: { y: 0.6 }
+      });
+    }
+
+    function celebrateExtra() {
+      playTone(1050, 0.4);
+      confetti({
+        particleCount: 100,
+        spread: 100,
+        origin: { y: 0.5 }
+      });
+    }
+  </script>
+</body>
+</html>

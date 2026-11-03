@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Storage & JSON Demo</title>
+</head>
+<body>
+
+    <div>
+        <h2>Web Storage & JSON Demo</h2>
+
+        <div>
+            <h3>1. Saved Settings</h3>
+            <div>Theme: <strong id="theme-output">-</strong></div>
+            <div>Font Size: <strong id="font-size-output">-</strong></div>
+        </div>
+
+        <div>
+            <h3>2. Actions</h3>
+            <button id="save-btn">Save Settings</button>
+            <button id="clear-btn">Clear Storage</button>
+        </div>
+    </div>
+
+    <script>
+        const themeOutput = document.getElementById("theme-output");
+        const fontSizeOutput = document.getElementById("font-size-output");
+        const saveBtn = document.getElementById("save-btn");
+        const clearBtn = document.getElementById("clear-btn");
+
+        // Function to load and display data from localStorage
+        function loadSettings() {
+            const savedData = localStorage.getItem("userSettings");
+            
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                themeOutput.textContent = parsedData.theme;
+                fontSizeOutput.textContent = parsedData.fontSize + "px";
+                console.log("Loaded Theme:", parsedData.theme);
+            } else {
+                themeOutput.textContent = "No data saved";
+                fontSizeOutput.textContent = "No data saved";
+                console.log("No settings found in localStorage");
+            }
+        }
+
+        // 1. Save Data (Convert Object to String using JSON.stringify)
+        saveBtn.addEventListener("click", () => {
+            const mySettings = { theme: "dark", fontSize: 16 };
+            localStorage.setItem("userSettings", JSON.stringify(mySettings));
+            console.log("Saved to localStorage:", mySettings);
+            loadSettings();
+        });
+
+        // 3. Clear Data
+        clearBtn.addEventListener("click", () => {
+            localStorage.removeItem("userSettings");
+            console.log("Cleared userSettings from localStorage");
+            loadSettings();
+        });
+
+        // Load saved data when the page loads
+        loadSettings();
+    </script>
+
+</body>
+</html>

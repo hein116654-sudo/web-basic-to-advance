@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synchronous vs Asynchronous JavaScript</title>
+</head>
+<body>
+
+    <div>
+        <h2>Synchronous vs Asynchronous JavaScript</h2>
+
+        <div>
+            <h3>1. Synchronous Execution (Blocking)</h3>
+            <button id="sync-btn">Run Synchronous Code</button>
+            <div>Output: <strong id="sync-output">-</strong></div>
+        </div>
+
+        <div>
+            <h3>2. Asynchronous Execution (Non-Blocking)</h3>
+            <button id="async-btn">Run Asynchronous Code</button>
+            <div>Output Log:</div>
+            <ul id="async-output-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Elements
+        const syncBtn = document.getElementById("sync-btn");
+        const syncOutput = document.getElementById("sync-output");
+        const asyncBtn = document.getElementById("async-btn");
+        const asyncOutputList = document.getElementById("async-output-list");
+
+        // Helper function to append log items to the list
+        function logToUI(message) {
+            const li = document.createElement("li");
+            li.textContent = message;
+            asyncOutputList.appendChild(li);
+        }
+
+        // 1. Synchronous Code
+        syncBtn.addEventListener("click", () => {
+            console.log("\n--- Synchronous Execution ---");
+            console.log("1. Start");
+            console.log("2. Middle");
+            console.log("3. End");
+
+            syncOutput.textContent = "1. Start -> 2. Middle -> 3. End";
+        });
+
+        // 2. Asynchronous Code
+        asyncBtn.addEventListener("click", () => {
+            // Clear previous output list
+            asyncOutputList.innerHTML = "";
+
+            console.log("\n--- Asynchronous Execution ---");
+
+            // Step 1
+            console.log("1. Order coffee");
+            logToUI("1. Order coffee");
+
+            // Async Operation (Scheduled for background)
+            setTimeout(() => {
+                console.log("2. Coffee is ready!");
+                logToUI("2. Coffee is ready! (After 2 seconds)");
+            }, 2000);
+
+            // Step 3 (Runs immediately without waiting for setTimeout)
+            console.log("3. Scroll on phone while waiting");
+            logToUI("3. Scroll on phone while waiting");
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💌 အသဲလေးအတွက် အရေးပေါ် တောင်းပန်လွှာ</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Noto+Sans+Myanmar:wght@400;500;600;700;800&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+    <!-- Confetti & HTML2Canvas CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Noto Sans Myanmar', 'Fredoka', sans-serif;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(255, 182, 193, 0.6), transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(255, 105, 180, 0.4), transparent 40%),
+                linear-gradient(135deg, #ffeef2 0%, #ffd6e0 50%, #ffc2d1 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 15px;
+            overflow-x: hidden;
+            color: #4a1d2f;
+            position: relative;
+        }
+
+        /* Floating background hearts */
+        .floating-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-sparkle {
+            position: absolute;
+            font-size: 18px;
+            opacity: 0.35;
+            animation: floatUp 7s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) scale(0.6) rotate(0deg); opacity: 0.2; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1.1) rotate(360deg); opacity: 0; }
+        }
+
+        /* Main Container */
+        .container {
+            width: 440px;
+            max-width: 95%;
+            background: rgba(255, 255, 255, 0.94);
+            border-radius: 36px;
+            border: 3px solid #ffffff;
+            box-shadow: 0 25px 60px rgba(255, 75, 130, 0.22), 0 10px 25px rgba(0,0,0,0.05);
+            backdrop-filter: blur(20px);
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Step Progress Dots */
+        .step-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ffccd9;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .dot.active {
+            background: #ff0a54;
+            width: 30px;
+            border-radius: 12px;
+        }
+
+        /* Scenes */
+        .scene {
+            display: none;
+            animation: sceneFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .scene.active {
+            display: block;
+        }
+
+        @keyframes sceneFadeIn {
+            from { opacity: 0; transform: translateY(16px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Sticker Container */
+        .sticker-frame {
+            width: 190px;
+            height: 190px;
+            margin: 0 auto 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #fff0f5 100%);
+            border: 3px solid #ffffff;
+            box-shadow: 0 12px 28px rgba(255, 75, 130, 0.2), inset 0 0 12px rgba(255, 180, 200, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .sticker-img {
+            width: 165px;
+            height: 165px;
+            object-fit: contain;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.08));
+        }
+
+        /* Emergency Badge */
+        .alert-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ffe3ea;
+            color: #ff0a54;
+            padding: 5px 16px;
+            border-radius: 50px;
+            font-size: 12.5px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            border: 1px dashed #ff477e;
+            animation: pulseBadge 2s infinite;
+        }
+
+        @keyframes pulseBadge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h2.headline {
+            font-size: 20px;
+            font-weight: 800;
+            color: #b7094c;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        p.dialog {
+            font-size: 14.5px;
+            line-height: 1.8;
+            color: #555555;
+            margin-bottom: 24px;
+            font-weight: 600;
+            min-height: 52px;
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #ff0a54 0%, #ff477e 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 10, 84, 0.35);
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            outline: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 14px 30px rgba(255, 10, 84, 0.45);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Final Contract Card */
+        .contract-box {
+            background: #fffdfa;
+            border: 2px dashed #ff0a54;
+            border-radius: 24px;
+            padding: 22px 18px;
+            text-align: left;
+            box-shadow: inset 0 0 18px rgba(255, 10, 84, 0.05);
+            line-height: 1.9;
+            font-size: 13.5px;
+            margin-bottom: 18px;
+        }
+
+        .contract-header {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .contract-header h3 {
+            color: #b7094c;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .contract-header span {
+            font-size: 11px;
+            color: #888888;
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        .contract-box ul {
+            margin: 10px 0 12px 20px;
+            color: #444;
+            font-size: 13px;
+        }
+
+        .contract-box li {
+            margin-bottom: 6px;
+        }
+
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 12.5px;
+            color: #a30f3c;
+            border-top: 1px dashed #ffccd9;
+            padding-top: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 26px 18px; border-radius: 28px; }
+            .sticker-frame { width: 170px; height: 170px; }
+            .sticker-img { width: 145px; height: 145px; }
+            h2.headline { font-size: 18px; }
+            p.dialog { font-size: 13.5px; }
+            .btn { font-size: 14px; padding: 13px 20px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Background Floating Hearts -->
+<div class="floating-bg" id="floatingBg"></div>
+
+<div class="container">
+
+    <!-- Step Progress Dots -->
+    <div class="step-dots">
+        <div class="dot active" id="dot1"></div>
+        <div class="dot" id="dot2"></div>
+        <div class="dot" id="dot3"></div>
+        <div class="dot" id="dot4"></div>
+        <div class="dot" id="dot5"></div>
+    </div>
+
+    <!-- =========================================================
+         SCENE 1: လက်ခံရရှိသူမြင်ရမည့် မျက်နှာပြင် (တောင်းပန်စာ ရောက်ရှိခြင်း)
+    ========================================================= -->
+    <div class="scene active" id="scene1">
+        <div class="alert-badge">🚨 အရေးပေါ် တောင်းပန်လွှာ ရောက်ရှိပါသည်</div>
+        
+        <div class="sticker-frame">
+            <!-- Pentol Knocking / Shy Pose -->
+            <img class="sticker-img" 
+                 src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHRuMGZweGRyMjBwM2dyMHE3ZXJheHp3NXMwaTFrMWh6bTFvbDBidiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/5CnOzYQRSFnWw/giphy.gif" 
+                 onerror="this.src='https://media.tenor.com/R1ZhJQIVUKYAAAAM/quby-quby-sticker.gif'" 
+                 alt="Pentol Asking Forgiveness">
+        </div>
+
+        <h2 class="headline">အသဲလေးအတွက် အထူးစာလွှာ 💌</h2>
+        <p class="dialog">
+            “စိတ်ဆိုးနေတဲ့ အသဲလေးဆီ မောင့်ဘက်က အလောတကြီး ပို့လိုက်တာပါ... အထဲကစာလေး တစ်ချက်လောက် ဖွင့်ကြည့်ပေးပါနော် 🥺👉👈”
+        </p>
+
+        <button class="btn" onclick="nextScene(2)">
+            📩 စာလွှာကို ဖွင့်ဖတ်မည် (ဟွန့် 😤)
+        </button>
+    </div>
+
+    <!-- =========================================================
+         SCENE 2: မျက်ရည်ချောင်းစီး ငိုပြခြင်း (Pentol Crying on Floor)
+    ========================================================= -->
+    <div class="scene" id="scene2">
+        <div class="alert-badge">😭 မောင့်ဘက်က အပြစ်ရှိပါသည်</div>
+
+        <div class="sticker-frame">
+            <!-- Pentol Crying Waterfall -->
+            <img class="sticker-img" 
+                 src="https://media.tenor.com/R1ZhJQIVUKYAAAAM/quby-quby-sticker.gif" 
+                 alt="Pentol Crying">
+        </div>
+
+        <h2 class="headline">တကယ် တောင်းပန်ပါတယ် အသဲလေးရယ်...</h2>
+        <p class="dialog">
+            “မောင့်ဘက်က မှားသွားတာ တကယ်ပါ... အသဲလေး စိတ်ဆိုးနေတော့ ရင်ထဲမှာ နေလို့မရတော့ဘူး မျက်ရည်တွေတောင် ချောင်းစီးနေပါပြီ... ခွင့်လွှတ်ပေးပါနော် 🥺💔”
+        </p>
+
+        <button class="btn" onclick="nextScene(3)">
+            😤 မပြေပါဘူး... ဘာလုပ်ပြဦးမှာလဲ?
+        </button>
+    </div>
+
+    <!-- =========================================================
+         SCENE 3: ရယ်ရအောင် ဖင်ခါကပြခြင်း (Pentol Butt Dance)
+    ========================================================= -->
+    <div class="scene" id="scene3">
+        <div class="alert-badge">🍑 အသဲလေး ရယ်သွားစေရန်</div>
+
+        <div class="sticker-frame">
+            <!-- Pentol Twerk Dance -->
+            <img class="sticker-img" 
+                 src="https://media.tenor.com/excMr37eGIkAAAAM/pentol-gif.gif" 
+                 alt="Pentol Butt Dance">
+        </div>
+
+        <h2 class="headline">ဖင်ခါကပြပြီး ရယ်အောင်လုပ်မယ်! 💃</h2>
+        <p class="dialog">
+            “ခိခိ... အသဲလေး မပြုံးမချင်း အရှက်မရှိ တစ်နေကုန် ဖင်ခါကပြနေမှာနော်! ပြုံးပြုံးလေး နေတော့နော်... ပြုံးလိုက်ပြီ မဟုတ်လား? 😂🍑”
+        </p>
+
+        <button class="btn" onclick="nextScene(4)">
+            🙄 ဒါလေးနဲ့တင် မရသေးဘူး (ဆက်ချော့)
+        </button>
+    </div>
+
+    <!-- =========================================================
+         SCENE 4: Shopping Card / Boba / Treats ပေးခြင်း
+    ========================================================= -->
+    <div class="scene" id="scene4">
+        <div class="alert-badge">💳 အကန့်အသတ်မရှိ စိတ်ကြိုက်ဝယ်ပါ</div>
+
+        <div class="sticker-frame">
+            <!-- Pentol Shopping Desk -->
+            <img class="sticker-img" 
+                 src="https://media.tenor.com/salF0aEfbpYAAAAM/pentol-stiker.gif" 
+                 alt="Pentol Shopping">
+        </div>
+
+        <h2 class="headline">အကြိုက်ဆုံးတွေ ဝယ်ဖို့ Card ပေးမယ်! 🛍️</h2>
+        <p class="dialog">
+            “ကဲ... အသဲလေး စိတ်ချမ်းသာဖို့ Cart ထဲက အကုန်ဝယ်တော့! Boba ရော အကြိုက်ဆုံး မုန့်တွေပါ အကုန်ကျွေးမယ်... ကတ်ယူလိုက်တော့နော် 💳✨”
+        </p>
+
+        <button class="btn" onclick="nextScene(5)">
+            🥰 စိတ်ဆိုးပြေပြီ (စာချုပ်လက်မှတ်ထိုးမည်)
+        </button>
+    </div>
+
+    <!-- =========================================================
+         SCENE 5: အချစ်ဆုံးပြန်ဖြစ်သွားခြင်း & တရားဝင် စာချုပ်
+    ========================================================= -->
+    <div class="scene" id="scene5">
+        
+        <!-- ဓာတ်ပုံအဖြစ် သိမ်းဆည်းမည့် စာချုပ် Card -->
+        <div class="contract-box" id="captureContract">
+            <div style="text-align: center; margin-bottom: 8px;">
+                <img src="https://media.tenor.com/bC9FzXp9HkAAAAAM/peach-goma-peach-and-goma.gif" 
+                     style="width: 80px; height: 80px; object-fit: contain;" 
+                     alt="Happy Hug">
+            </div>
+
+            <div class="contract-header">
+                <h3>📜 တရားဝင် အပြစ်ဒဏ် လျှော့ပေါ့ရေး စာချုပ်</h3>
+                <span>OFFICIAL PEACE AGREEMENT CERTIFICATE</span>
+            </div>
+
+            <p style="font-size: 13px; color: #444;">
+                🌸 <strong>အသဲလေး</strong> သည် <strong>မောင်</strong> ၏ အစွမ်းကုန် ချော့မော့မှုများကို လက်ခံရရှိပြီးနောက် စိတ်ဆိုး/စိတ်ကောက်ခြင်းများ အားလုံးကို တရားဝင် ခွင့်လွှတ်ပေးလိုက်ပြီ ဖြစ်ပါသည်။
+            </p>
+
+            <ul>
+                <li>📌 နောက်နောင် စိတ်ကောက်ပါက ၅ မိနစ်အတွင်း အမြန်ချော့ရမည်။</li>
+                <li>📌 စိတ်ဆိုးပြေဆေးအဖြစ် Boba နှင့် အကြိုက်ဆုံးမုန့်များ ဝယ်ကျွေးရမည်။</li>
+                <li>📌 တစ်သက်လုံး အသဲလေးကိုပဲ ချစ်ပါမည်ဟု အလေးအနက် ကတိပြုပါသည်။</li>
+            </ul>
+
+            <div class="signatures">
+                <span>ဝန်ခံလက်မှတ် - မောင် ✍️</span>
+                <span>ခွင့်လွှတ်သူ - အသဲလေး 💍</span>
+            </div>
+        </div>
+
+        <button class="btn" id="btnDownload" onclick="downloadContractPNG()">
+            🖼️ စာချုပ်ကို ဓာတ်ပုံ (PNG) အဖြစ် သိမ်းမည်
+        </button>
+    </div>
+
+</div>
+
+<script>
+    /* 1. Generate Floating Sparkles */
+    const floatingBg = document.getElementById('floatingBg');
+    const sparkles = ['💖', '💕', '✨', '🌸', '💗', '⭐'];
+    for (let i = 0; i < 20; i++) {
+        const span = document.createElement('span');
+        span.className = 'bg-sparkle';
+        span.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+        span.style.left = `${Math.random() * 100}vw`;
+        span.style.animationDuration = `${5 + Math.random() * 5}s`;
+        span.style.animationDelay = `${Math.random() * 5}s`;
+        span.style.fontSize = `${14 + Math.random() * 16}px`;
+        floatingBg.appendChild(span);
+    }
+
+    /* 2. Scene Navigation */
+    function nextScene(step) {
+        playPopBeep();
+
+        document.querySelectorAll('.scene').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.dot').forEach(el => el.classList.remove('active'));
+
+        document.getElementById(`scene${step}`).classList.add('active');
+        document.getElementById(`dot${step}`).classList.add('active');
+
+        // Scene 5 Confetti Blast
+        if (step === 5) {
+            triggerConfetti();
+        }
+    }
+
+    /* 3. Cute Web Audio Effect */
+    let audioCtx;
+    function playPopBeep() {
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(850, audioCtx.currentTime + 0.12);
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.14);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.15);
+        } catch(e) {}
+    }
+
+    /* 4. Confetti Celebration */
+    function triggerConfetti() {
+        const count = 180;
+        confetti({
+            particleCount: count,
+            spread: 90,
+            origin: { y: 0.6 },
+            colors: ['#ff0a54', '#ff477e', '#ffccd9', '#ffd166', '#ffffff']
+        });
+    }
+
+    /* 5. Download Contract as PNG */
+    function downloadContractPNG() {
+        const card = document.getElementById('captureContract');
+        const btn = document.getElementById('btnDownload');
+        const originalText = btn.innerHTML;
+
+        btn.innerHTML = "⏳ ဓာတ်ပုံ ထုတ်ယူနေပါသည်...";
+        btn.style.pointerEvents = "none";
+
+        html2canvas(card, {
+            scale: 3,
+            backgroundColor: "#fffdfa",
+            useCORS: true
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'Peace-Agreement-Certificate.png';
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+
+            btn.innerHTML = "✅ ဓာတ်ပုံ သိမ်းဆည်းပြီးပါပြီ!";
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.pointerEvents = "auto";
+            }, 2500);
+        }).catch(err => {
+            alert("ဓာတ်ပုံထုတ်ယူရာတွင် အဆင်မပြေဖြစ်သွားပါသည်");
+            btn.innerHTML = originalText;
+            btn.style.pointerEvents = "auto";
+        });
+    }
+</script>
+
+</body>
+</html>

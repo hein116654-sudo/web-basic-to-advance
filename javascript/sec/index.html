@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Love Letter For Crush ❤️</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Noto+Sans+Myanmar:wght@400;500;600;700&family=Pacifico&family=Padauk:wght@400;700&family=Poppins:wght@300;400;600&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    /* =========================================
+       RESET & BASE STYLES
+    ========================================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at center, #2e1236 0%, #15091a 60%, #08030b 100%);
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      perspective: 1000px;
+      padding: 20px 0;
+    }
+
+    /* =========================================
+       BACKGROUND STARS & PARTICLES
+    ========================================= */
+    .stars-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      background: #ffffff;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: twinkle 3s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% {
+        opacity: 0.2;
+        transform: scale(0.8);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.3);
+      }
+    }
+
+    .particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      animation: particleFloat 7s linear infinite;
+    }
+
+    @keyframes particleFloat {
+      0% {
+        opacity: 0;
+        transform: translateY(105vh) scale(0.5);
+      }
+      15% { opacity: 0.7; }
+      85% { opacity: 0.7; }
+      100% {
+        opacity: 0;
+        transform: translateY(-10vh) scale(1.2);
+      }
+    }
+
+    /* =========================================
+       MAIN CONTAINER
+    ========================================= */
+    .container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;
+      padding: 10px 20px;
+    }
+
+    /* Title */
+    .title {
+      color: #ffffff;
+      font-family: 'Pacifico', cursive;
+      font-size: 2.8rem;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 0 0 15px rgba(255, 105, 180, 0.7), 0 0 35px rgba(255, 75, 110, 0.5);
+    }
+
+    /* =========================================
+       ENVELOPE WRAPPER
+    ========================================= */
+    .envelope-wrapper {
+      position: relative;
+      cursor: pointer;
+      margin-bottom: 30px;
+      padding-top: 150px;
+      transition: transform 0.3s ease;
+    }
+
+    .envelope-wrapper:hover {
+      transform: translateY(-3px);
+    }
+
+    /* =========================================
+       ENVELOPE
+    ========================================= */
+    #envelope {
+      position: relative;
+      width: 380px;
+      height: 260px;
+      background-color: #d9534f;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 80, 100, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    /* =========================================
+       3D FLAP
+    ========================================= */
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 190px solid transparent;
+      border-right: 190px solid transparent;
+      border-top: 140px solid #ff7b72;
+      transform-origin: top center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s 0.3s;
+      z-index: 5;
+      filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+    }
+
+    .open .flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s 0.2s;
+    }
+
+    .flap-seal {
+      position: absolute;
+      top: -150px;
+      left: -18px;
+      width: 36px;
+      height: 36px;
+      background: radial-gradient(circle, #ffecec 0%, #ff5e62 80%);
+      border-radius: 50%;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35), 0 0 10px rgba(255, 100, 120, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #ffffff;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .open .flap-seal {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+
+    /* =========================================
+       LETTER CARD
+    ========================================= */
+    .letter {
+      position: absolute;
+      width: 340px;
+      height: 235px;
+      top: 12px;
+      left: 20px;
+      padding: 12px 18px;
+      background: linear-gradient(135deg, #fffdfa 0%, #fff6f3 100%);
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      font-family: 'Padauk', 'Noto Sans Myanmar', sans-serif;
+      color: #333333;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.6s ease;
+      z-index: 2;
+    }
+
+    .open .letter {
+      transform: translateY(-160px);
+      z-index: 4;
+      transition-delay: 0.35s;
+    }
+
+    .letter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px dashed #ffb4b4;
+      padding-bottom: 4px;
+    }
+
+    .letter-to {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #e63946;
+    }
+
+    .letter-sticker {
+      font-size: 22px;
+      animation: stickerBounce 2s infinite ease-in-out;
+    }
+
+    @keyframes stickerBounce {
+      0%, 100% { transform: rotate(-5deg) scale(1); }
+      50% { transform: rotate(5deg) scale(1.12); }
+    }
+
+    .letter-body {
+      font-size: 0.86rem;
+      line-height: 1.55;
+      text-align: center;
+      color: #3f3f3f;
+      margin: 4px 0;
+    }
+
+    .letter-body p {
+      margin-bottom: 4px;
+    }
+
+    .letter-body .greeting {
+      font-weight: 600;
+      color: #ff477e;
+    }
+
+    .letter-body .highlight {
+      color: #e63946;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-top: 6px;
+      animation: heartbeat 1.5s infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      20% { transform: scale(1.05); }
+      40% { transform: scale(1); }
+    }
+
+    .letter-footer {
+      text-align: right;
+      font-size: 0.82rem;
+      color: #777777;
+      font-style: italic;
+    }
+
+    /* =========================================
+       ENVELOPE POCKET
+    ========================================= */
+    .pocket {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .pocket-left {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 190px solid #ff645a;
+      border-top: 130px solid transparent;
+      border-bottom: 130px solid #ff645a;
+      border-bottom-left-radius: 10px;
+    }
+
+    .pocket-right {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-right: 190px solid #ff645a;
+      border-top: 130px solid transparent;
+      border-bottom: 130px solid #ff645a;
+      border-bottom-right-radius: 10px;
+    }
+
+    .pocket-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 190px solid transparent;
+      border-right: 190px solid transparent;
+      border-bottom: 145px solid #ff857d;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    /* =========================================
+       FLOATING HEARTS
+    ========================================= */
+    .hearts {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0;
+      filter: drop-shadow(0 0 8px rgba(255, 100, 150, 0.8));
+    }
+
+    .open .heart {
+      animation: floatHeart 2.5s ease-out forwards;
+    }
+
+    .heart:nth-child(1) { left: 18%; animation-delay: 0.35s; }
+    .heart:nth-child(2) { left: 45%; animation-delay: 0.55s; }
+    .heart:nth-child(3) { left: 75%; animation-delay: 0.45s; }
+    .heart:nth-child(4) { left: 32%; animation-delay: 0.75s; }
+    .heart:nth-child(5) { left: 62%; animation-delay: 0.85s; }
+
+    @keyframes floatHeart {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.6) rotate(0deg);
+      }
+      20% { opacity: 1; }
+      30% {
+        opacity: 1;
+        transform: translateY(-60px) scale(1.2) rotate(-10deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-220px) scale(0.8) rotate(20deg);
+      }
+    }
+
+    /* =========================================
+       HINT & BUTTONS
+    ========================================= */
+    .hint-text {
+      color: #f7d794;
+      font-size: 0.95rem;
+      margin-bottom: 18px;
+      letter-spacing: 0.8px;
+      text-align: center;
+      animation: pulseText 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseText {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.03); }
+    }
+
+    .controls {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 10px 32px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border: 2px solid #ff4b72;
+      border-radius: 25px;
+      background: transparent;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(255, 75, 114, 0.25);
+    }
+
+    .btn:hover {
+      background: #ff4b72;
+      box-shadow: 0 0 20px rgba(255, 75, 114, 0.7);
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0) scale(0.96);
+    }
+
+    /* =========================================
+       MOBILE RESPONSIVE
+    ========================================= */
+    @media (max-width: 480px) {
+      .title {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+      }
+
+      .envelope-wrapper {
+        padding-top: 135px;
+      }
+
+      #envelope {
+        width: 320px;
+        height: 230px;
+      }
+
+      .flap {
+        border-left-width: 160px;
+        border-right-width: 160px;
+        border-top-width: 125px;
+      }
+
+      .flap-seal {
+        top: -135px;
+        left: -16px;
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+      }
+
+      .pocket-left {
+        border-left-width: 160px;
+        border-top-width: 115px;
+        border-bottom-width: 115px;
+      }
+
+      .pocket-right {
+        border-right-width: 160px;
+        border-top-width: 115px;
+        border-bottom-width: 115px;
+      }
+
+      .pocket-bottom {
+        border-left-width: 160px;
+        border-right-width: 160px;
+        border-bottom-width: 130px;
+      }
+
+      .letter {
+        width: 290px;
+        height: 210px;
+        left: 15px;
+        top: 10px;
+        padding: 10px 14px;
+      }
+
+      .open .letter {
+        transform: translateY(-145px);
+      }
+
+      .letter-to { font-size: 0.95rem; }
+      .letter-body { font-size: 0.76rem; line-height: 1.48; }
+      .letter-body .highlight { font-size: 0.84rem; }
+      .letter-footer { font-size: 0.74rem; }
+      .btn { padding: 9px 24px; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Audio Element -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="biilie.mp4" type="audio/mp4">
+  </audio>
+
+  <!-- Background Stars -->
+  <div class="stars-container" id="starsContainer"></div>
+
+  <div class="container">
+    <!-- Title -->
+    <h1 class="title">Love Letter ❤️</h1>
+
+    <!-- Envelope Wrapper -->
+    <div class="envelope-wrapper" id="envelopeWrapper">
+      <div id="envelope">
+
+        <!-- 3D Flap -->
+        <div class="flap">
+          <div class="flap-seal">❤️</div>
+        </div>
+
+        <!-- The Letter Card -->
+        <div class="letter">
+          <div class="letter-header">
+            <span class="letter-to">To: ငါ့ရဲ့ Crush လေး ❤️</span>
+            <span class="letter-sticker">🥰</span>
+          </div>
+
+          <div class="letter-body">
+            <p class="greeting">ချစ်ရတဲ့ Crush လေးရေ...</p>
+            <p>မင်းရဲ့ အပြုံးလေးတွေကို မြင်ရတဲ့နေ့တိုင်း ငါ့အတွက်တော့ အဓိပ္ပာယ်တွေနဲ့ ပြည့်စုံလွန်းပါတယ် 🌸</p>
+            <p>စကားတွေ အများကြီး မပြောတတ်ပေမဲ့ မင်းအနားမှာ အမြဲတမ်း ရှိနေပေးချင်တယ်</p>
+            <p class="highlight">တကယ်တော့... မင်းကို သိပ်ချစ်နေမိပြီ ❤️</p>
+          </div>
+
+          <div class="letter-footer">
+            မင်းတစ်ယောက်တည်းကိုသာ ✨
+          </div>
+        </div>
+
+        <!-- Front Pocket -->
+        <div class="pocket">
+          <div class="pocket-left"></div>
+          <div class="pocket-right"></div>
+          <div class="pocket-bottom"></div>
+        </div>
+
+        <!-- Floating Hearts -->
+        <div class="hearts">
+          <div class="heart">❤️</div>
+          <div class="heart">💖</div>
+          <div class="heart">💕</div>
+          <div class="heart">💘</div>
+          <div class="heart">💓</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Instruction hint -->
+    <p class="hint-text">✨ Tap the envelope to open your letter ✨</p>
+
+    <!-- Buttons -->
+    <div class="controls">
+      <button class="btn" id="openBtn" type="button">OPEN</button>
+      <button class="btn" id="closeBtn" type="button">CLOSE</button>
+    </div>
+  </div>
+
+  <script>
+    // Audio Player Auto-play Logic
+    const bgMusic = document.getElementById('bgMusic');
+
+    function playAudio() {
+      if (bgMusic.paused) {
+        bgMusic.play().catch(err => console.log('Autoplay blocked:', err));
+      }
+    }
+
+    // ကောင်းကင်မှ ကြယ်လေးများ ဖန်တီးခြင်း
+    const starsContainer = document.getElementById('starsContainer');
+    for (let i = 0; i < 65; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = Math.random() * 3 + 1;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      star.style.left = `${Math.random() * 100}vw`;
+      star.style.top = `${Math.random() * 100}vh`;
+      star.style.animationDelay = `${Math.random() * 3}s`;
+      star.style.animationDuration = `${2 + Math.random() * 3}s`;
+      starsContainer.appendChild(star);
+    }
+
+    // Floating particles
+    const particleSymbols = ['✨', '💗', '🌸', '💕', '✦'];
+    for (let i = 0; i < 15; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.textContent = particleSymbols[Math.floor(Math.random() * particleSymbols.length)];
+      particle.style.left = `${Math.random() * 100}vw`;
+      particle.style.fontSize = `${12 + Math.random() * 14}px`;
+      particle.style.animationDelay = `${Math.random() * 6}s`;
+      particle.style.animationDuration = `${5 + Math.random() * 5}s`;
+      document.body.appendChild(particle);
+    }
+
+    // စာအိတ် ဖွင့်/ပိတ် Logic
+    const envelope = document.getElementById('envelope');
+    const envelopeWrapper = document.getElementById('envelopeWrapper');
+    const openBtn = document.getElementById('openBtn');
+    const closeBtn = document.getElementById('closeBtn');
+
+    function openEnvelope() {
+      playAudio(); // စာအိတ်ဖွင့်သည်နှင့် သီချင်းဖွင့်မည်
+      if (envelope.classList.contains('open')) return;
+      envelope.classList.add('open');
+
+      const hearts = envelope.querySelectorAll('.heart');
+      hearts.forEach(heart => {
+        heart.style.animation = 'none';
+        void heart.offsetWidth;
+        heart.style.animation = '';
+      });
+    }
+
+    function closeEnvelope() {
+      envelope.classList.remove('open');
+    }
+
+    // စာအိတ် သို့မဟုတ် Screen ကို နှိပ်လျှင် Audio စတင်ပါမည်
+    envelopeWrapper.addEventListener('click', () => {
+      if (envelope.classList.contains('open')) {
+        closeEnvelope();
+      } else {
+        openEnvelope();
+      }
+    });
+
+    openBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openEnvelope();
+    });
+
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeEnvelope();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') openEnvelope();
+      if (e.key === 'Escape') closeEnvelope();
+    });
+
+    // Screen ပေါ် ရောက်သွားလျှင် User ရဲ့ ပထမဆုံး Click မှာတင် သီချင်းစတင်နိုင်ရန်
+    document.addEventListener('click', playAudio, { once: true });
+  </script>
+</body>
+</html>

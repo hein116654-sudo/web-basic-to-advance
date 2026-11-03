@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Conditionals</h2>
+    <script>
+        let examMark = 80;
+        // if / else if / else
+        if (examMark >= 80) {
+            console.log("Pass with destination");
+        } else if (examMark >= 40) {
+            console.log("Normal pass");
+        } else {
+            console.log("Fail");
+        }
+
+        //ternary operator
+        let isPassed = examMark >= 40 ? "Passed" : "Failed";
+        console.log('Exam result', isPassed);
+
+    </script>
+</body>
+</html>

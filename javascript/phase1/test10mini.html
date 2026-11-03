@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>MINI PROJECT</h2>
+    <script>
+        //array of objects
+        const studentList = [
+            { name: 'Mg Mg', mark: 85 },
+            { name: 'Hla Hla', mark: 35 },
+            { name: 'Kyaw Kyaw', mark: 60 }
+        ];
+        //arrow function
+        const checkGrade = (mark) => {
+            if (mark >= 75) return 'A';
+            if (mark >= 50) return 'C';
+            return  'F';
+        }
+
+        for (const s of studentList) {
+            const grade = checkGrade(s.mark);//85
+            const passStatus = s.mark >= 50 ? 'Passed' : 'Failed';
+            
+            console.log(`Name: ${s.name} | Mark: ${s.mark} | Grade: ${grade}(${passStatus})`);
+        }
+
+    </script>
+</body>
+</html>

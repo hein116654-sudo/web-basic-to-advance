@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promises Demo</title>
+</head>
+<body>
+
+    <div>
+        <h2>Step 2: From Callbacks to Promises</h2>
+
+        <div>
+            <h3>Check Item Stock</h3>
+            <button id="check-stock-btn">Check Laptop Stock</button>
+            <p>Status: <strong id="status-output">Idle</strong></p>
+            <p>Result: <strong id="result-output">-</strong></p>
+        </div>
+    </div>
+
+    <script>
+        const checkStockBtn = document.getElementById("check-stock-btn");
+        const statusOutput = document.getElementById("status-output");
+        const resultOutput = document.getElementById("result-output");
+
+        // Function that returns a Promise
+        const checkStock = (item) => {
+            return new Promise((resolve, reject) => {
+                const isAvailable = false;
+
+                setTimeout(() => {
+                    if (isAvailable) {
+                        resolve(`${item} is in stock!`);
+                    } else {
+                        reject(`Sorry, ${item} is sold out.`);
+                    }
+                }, 1500);
+            });
+        };
+
+        // Consuming the Promise on button click
+        checkStockBtn.addEventListener("click", () => {
+            statusOutput.textContent = "Checking stock... (Pending)";
+            resultOutput.textContent = "-";
+
+            checkStock("Laptop")
+                .then((message) => {
+                    console.log("Success:", message);
+                    statusOutput.textContent = "Fulfilled";
+                    resultOutput.textContent = message;
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    statusOutput.textContent = "Rejected";
+                    resultOutput.textContent = error;
+                })
+                .finally(() => {
+                    console.log("Stock check finished.");
+                });
+        });
+    </script>
+
+</body>
+</html>

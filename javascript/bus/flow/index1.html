@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>A Silent Heartbreak 🌧️</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Plus+Jakarta+Sans:wght@500;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 50% 25%, #bae6fd 0%, #38bdf8 30%, #0284c7 65%, #082f49 100%);
+      font-family: 'Padauk', 'Plus Jakarta Sans', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      overflow: hidden;
+      color: #0f172a;
+    }
+
+    /* Ambient Falling Rain / Tear Dust Particles */
+    .rain-drop {
+      position: fixed;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(224, 242, 254, 0.75));
+      width: 1.5px;
+      pointer-events: none;
+      animation: fallDown linear infinite;
+    }
+
+    @keyframes fallDown {
+      0% { transform: translateY(-20px); opacity: 0; }
+      30% { opacity: 0.8; }
+      100% { transform: translateY(105vh); opacity: 0; }
+    }
+
+    /* Soft glowing aura in the background */
+    .ambient-glow {
+      position: fixed;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(224, 242, 254, 0.4) 0%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(40px);
+      pointer-events: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 410px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    /* ==============================================
+       SCENE 1: AIMING ARROW & CRYSTAL HEART
+       ============================================== */
+    .aiming-scene {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      position: relative;
+    }
+
+    .aiming-scene.vanish {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.7);
+    }
+
+    .top-badge {
+      display: inline-block;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: #0369a1;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(10px);
+      padding: 5px 18px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.2);
+    }
+
+    .battle-stage {
+      position: relative;
+      width: 280px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* The Crystal Heart */
+    .heart-wrapper {
+      position: absolute;
+      right: 20px;
+      width: 140px;
+      height: 140px;
+    }
+
+    .heart-half {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+      filter: drop-shadow(0 10px 25px rgba(2, 132, 199, 0.5));
+    }
+
+    .heart-half.shatter-left {
+      transform: translate(-50px, 30px) rotate(-40deg);
+      opacity: 0;
+    }
+
+    .heart-half.shatter-right {
+      transform: translate(50px, 30px) rotate(40deg);
+      opacity: 0;
+    }
+
+    /* The Aiming Bow & Arrow */
+    .bow-arrow-kit {
+      position: absolute;
+      left: 0;
+      width: 130px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      animation: aimTension 2.2s infinite ease-in-out;
+      transform-origin: left center;
+      transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.4s ease;
+    }
+
+    @keyframes aimTension {
+      0%, 100% { transform: translateX(0) rotate(0deg); }
+      50% { transform: translateX(-8px) rotate(-3deg); }
+    }
+
+    .arrow-shaft {
+      position: absolute;
+      left: 30px;
+      width: 85px;
+      height: 20px;
+      transition: left 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* When shooting: arrow zips across into the heart */
+    .bow-arrow-kit.fired .arrow-shaft {
+      left: 170px;
+      opacity: 0;
+    }
+
+    .bow-arrow-kit.fired {
+      animation: none;
+      transform: translateX(-15px);
+    }
+
+    .action-prompt {
+      margin-top: 30px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0c4a6e;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(12px);
+      padding: 10px 24px;
+      border-radius: 25px;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 8px 25px rgba(2, 132, 199, 0.25);
+      animation: pulseBtn 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    /* ==============================================
+       SCENE 2: POETIC REVEAL CARD + SAD GIF
+       ============================================== */
+    .message-card {
+      position: absolute;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      border-radius: 34px;
+      padding: 24px 20px 26px;
+      text-align: center;
+      box-shadow: 0 30px 70px rgba(8, 47, 73, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.9) translateY(40px);
+      transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 20;
+      max-height: 92vh;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .message-card::-webkit-scrollbar {
+      display: none;
+    }
+
+    .message-card.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Sad Journey GIF Container */
+    .gif-frame {
+      width: 100%;
+      max-width: 260px;
+      height: 150px;
+      margin: 0 auto 16px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 2px solid #bae6fd;
+      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.25);
+      background: #e0f2fe;
+    }
+
+    .gif-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .quote-tag {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #0284c7;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .poem-body {
+      font-size: 15px;
+      line-height: 2;
+      color: #1e293b;
+      font-weight: 400;
+      margin-bottom: 18px;
+    }
+
+    .poem-body p {
+      margin-bottom: 12px;
+    }
+
+    .poem-body b {
+      color: #0369a1;
+      font-weight: 700;
+    }
+
+    .footer-note {
+      font-size: 13px;
+      color: #64748b;
+      font-style: italic;
+      border-top: 1px dashed #bae6fd;
+      padding-top: 12px;
+    }
+
+    /* Crystal Shards Effect */
+    .shard {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #e0f2fe;
+      border: 1px solid #38bdf8;
+      border-radius: 2px;
+      pointer-events: none;
+      animation: explode 1s forwards ease-out;
+    }
+
+    @keyframes explode {
+      0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: translate(var(--tx), var(--ty)) scale(0) rotate(var(--tr)); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow"></div>
+  <div id="rainContainer"></div>
+
+  <main class="container">
+
+    <!-- ==============================================
+         SCENE 1: AIMING BOW & ARROW AT THE HEART
+         ============================================== -->
+    <div class="aiming-scene" id="aimingScene" onclick="fireArrow()">
+      <div class="top-badge">A SILENT GOODBYE 🌧️</div>
+
+      <div class="battle-stage" id="battleStage">
+        
+        <!-- Bow & Drawn Arrow (Aiming) -->
+        <div class="bow-arrow-kit" id="bowKit">
+          <!-- Bow SVG -->
+          <svg width="60" height="100" viewBox="0 0 60 100" fill="none">
+            <path d="M15 10 C45 35 45 65 15 90" stroke="#0284c7" stroke-width="4.5" stroke-linecap="round"/>
+            <line x1="15" y1="10" x2="35" y2="50" stroke="#bae6fd" stroke-width="2"/>
+            <line x1="15" y1="90" x2="35" y2="50" stroke="#bae6fd" stroke-width="2"/>
+          </svg>
+
+          <!-- Arrow (Loaded & Ready) -->
+          <div class="arrow-shaft" id="arrow">
+            <svg viewBox="0 0 85 20" fill="none">
+              <line x1="5" y1="10" x2="75" y2="10" stroke="#0c4a6e" stroke-width="3.5" stroke-linecap="round"/>
+              <polygon points="72,4 85,10 72,16" fill="#0284c7"/>
+              <path d="M2 4 L12 10 L2 16" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- The Crystal Heart -->
+        <div class="heart-wrapper" id="heartBox">
+          <!-- Left Half -->
+          <svg class="heart-half" id="halfLeft" viewBox="0 0 140 140" fill="none">
+            <path d="M70 120 L66 116 C30 86 10 65 10 40 C10 18 26 2 48 2 C60 2 70 9 70 18 L70 45 L62 60 L70 75 L65 90 L70 105 Z" 
+                  fill="url(#blueIceLeft)" stroke="#ffffff" stroke-width="2"/>
+            <defs>
+              <linearGradient id="blueIceLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#bae6fd"/>
+                <stop offset="50%" stop-color="#38bdf8"/>
+                <stop offset="100%" stop-color="#0284c7"/>
+              </linearGradient>
+            </defs>
+          </svg>
+
+          <!-- Right Half -->
+          <svg class="heart-half" id="halfRight" viewBox="0 0 140 140" fill="none">
+            <path d="M70 18 C70 9 80 2 92 2 C114 2 130 18 130 40 C130 65 110 86 74 116 L70 120 L70 105 L65 90 L70 75 L62 60 L70 45 Z" 
+                  fill="url(#blueIceRight)" stroke="#ffffff" stroke-width="2"/>
+            <defs>
+              <linearGradient id="blueIceRight" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#e0f2fe"/>
+                <stop offset="50%" stop-color="#7dd3fc"/>
+                <stop offset="100%" stop-color="#0369a1"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+      </div>
+
+      <div class="action-prompt">
+        ထိတွေ့ပြီး မြားကို ပစ်လွှတ်ပါ 🏹💔
+      </div>
+    </div>
+
+    <!-- ==============================================
+         SCENE 2: POEM & SAD GIF CARD
+         ============================================== -->
+    <div class="message-card" id="messageCard">
+      
+      <!-- တောင်းဆိုထားသော GIF -->
+      <div class="gif-frame">
+        <img src="https://media.tenor.com/CZOOCfalXVkAAAAm/journey-sad.webp" alt="Sad Journey">
+      </div>
+
+      <div class="quote-tag">အဆုံးသတ် ဆုတောင်းလွှာ 🌧️</div>
+
+      <div class="poem-body">
+        <p>အချစ်မှာ <b>မျက်စိမပါဘူးဆိုတာ</b> တကယ်ပါပဲ။</p>
+        <p>သူမ ပြန်မလာတော့မယ့် အမှန်တရားကို<br>မမြင်ချင်ရောင်ဆောင်ရင်း စောင့်နေမိတဲ့အထိပေါ့။</p>
+        <p>မင်း မလာတော့ဘူးဆိုတာ သိပေမဲ့<br>မင်းကို မျှော်နေရတာကိုက<br><b>ငါ့ရဲ့ ပျော်ရွှင်ခြင်းတစ်မျိုး</b> ဖြစ်နေခဲ့လို့ပါ။</p>
+        <p>ငါနဲ့ မဆုံနိုင်တော့ရင်တောင်မှ<br>မင်းရဲ့ ကမ္ဘာငယ်လေးထဲမှာ မင်း အမြဲတမ်း<br>အဆင်ပြေ၊ ပျော်ရွှင်ပါစေလို့ ဆုတောင်းပေးပါတယ်ကွာ။</p>
+      </div>
+
+      <div class="footer-note">
+        — အဝေးကနေ အမြဲတမ်း ဆုတောင်းပေးနေသူ 🕊️
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // 1. Rain Drops Generation
+    const rainBox = document.getElementById('rainContainer');
+    for (let i = 0; i < 40; i++) {
+      const drop = document.createElement('div');
+      drop.className = 'rain-drop';
+      drop.style.height = (Math.random() * 20 + 15) + 'px';
+      drop.style.left = Math.random() * 100 + 'vw';
+      drop.style.animationDuration = (Math.random() * 1.5 + 1.2) + 's';
+      drop.style.animationDelay = (Math.random() * 2) + 's';
+      rainBox.appendChild(drop);
+    }
+
+    // 2. Melancholic Sound (Arrow Release, Shatter & Sad Piano Chord)
+    let audioCtx = null;
+
+    function playSadAudio() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Arrow Whoosh
+        const whoosh = audioCtx.createOscillator();
+        const whooshGain = audioCtx.createGain();
+        whoosh.frequency.setValueAtTime(350, audioCtx.currentTime);
+        whoosh.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.15);
+        whooshGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        whooshGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+        whoosh.connect(whooshGain);
+        whooshGain.connect(audioCtx.destination);
+        whoosh.start();
+        whoosh.stop(audioCtx.currentTime + 0.15);
+
+        // Glass shatter & Sad Minor Piano Chord
+        const sadChords = [587.33, 523.25, 440.00, 349.23, 261.63]; // D5, C5, A4, F4, C4 (Dm7)
+        sadChords.forEach((freq, i) => {
+          setTimeout(() => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sine";
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.09, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 2.2);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 2.2);
+          }, i * 140);
+        });
+      } catch (e) {}
+    }
+
+    // 3. Crystal Shards Explosion
+    function explodeShards() {
+      const stage = document.getElementById('battleStage');
+      for (let i = 0; i < 26; i++) {
+        const shard = document.createElement('div');
+        shard.className = 'shard';
+        const angle = Math.random() * 2 * Math.PI;
+        const dist = Math.random() * 110 + 40;
+        shard.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+        shard.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+        shard.style.setProperty('--tr', Math.random() * 360 + 'deg');
+        shard.style.left = '75%';
+        shard.style.top = '50%';
+        stage.appendChild(shard);
+
+        setTimeout(() => shard.remove(), 1000);
+      }
+    }
+
+    let isFired = false;
+
+    function fireArrow() {
+      if (isFired) return;
+      isFired = true;
+
+      // 1. Release Bow & Arrow
+      document.getElementById('bowKit').classList.add('fired');
+
+      // 2. Play Sound, Shatter & Explode Shards
+      setTimeout(() => {
+        playSadAudio();
+        explodeShards();
+
+        document.getElementById('halfLeft').classList.add('shatter-left');
+        document.getElementById('halfRight').classList.add('shatter-right');
+      }, 350);
+
+      // 3. Vanish Scene 1
+      setTimeout(() => {
+        document.getElementById('aimingScene').classList.add('vanish');
+      }, 950);
+
+      // 4. Reveal Poetic Sad Card with GIF
+      setTimeout(() => {
+        document.getElementById('messageCard').classList.add('active');
+      }, 1400);
+    }
+  </script>
+</body>
+</html>

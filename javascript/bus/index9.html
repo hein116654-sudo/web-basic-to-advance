@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will You Be My Girlfriend? ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Padauk:wght@700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti Library for Epic Celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at center, #ffe6eb 0%, #ffd1dc 50%, #ffb6c1 100%);
+      font-family: 'Fredoka', 'Padauk', sans-serif;
+      overflow: hidden;
+      padding: 20px;
+      position: relative;
+    }
+
+    /* Floating background hearts */
+    .bg-heart {
+      position: absolute;
+      color: rgba(255, 75, 114, 0.25);
+      font-size: 24px;
+      animation: floatBg 6s infinite linear;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes floatBg {
+      0% {
+        transform: translateY(105vh) scale(0.6) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1.2) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Main Cute Card */
+    .card {
+      position: relative;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 35px 25px 40px;
+      border-radius: 32px;
+      box-shadow: 0 20px 50px rgba(255, 105, 140, 0.35), 0 0 0 10px rgba(255, 255, 255, 0.7);
+      text-align: center;
+      width: 100%;
+      max-width: 440px;
+      backdrop-filter: blur(10px);
+      transition: all 0.4s ease;
+    }
+
+    /* Pentol / Quby Sticker Character Wrapper */
+    .sticker-wrapper {
+      width: 180px;
+      height: 170px;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .sticker-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 6px 12px rgba(255, 120, 150, 0.25));
+    }
+
+    /* Shaking / Bouncing sticker animations */
+    .bounce-character {
+      animation: charWiggle 2.5s infinite ease-in-out;
+      transform-origin: bottom center;
+    }
+
+    @keyframes charWiggle {
+      0%, 100% { transform: rotate(0deg) translateY(0); }
+      25% { transform: rotate(-4deg) translateY(-5px); }
+      75% { transform: rotate(4deg) translateY(-3px); }
+    }
+
+    .crying-character {
+      animation: charSob 0.8s infinite ease-in-out;
+    }
+
+    @keyframes charSob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    /* Question Typography */
+    .question-title {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #ff3366;
+      margin-bottom: 6px;
+      line-height: 1.3;
+      text-shadow: 0 2px 6px rgba(255, 51, 102, 0.15);
+    }
+
+    .question-sub {
+      font-size: 1.1rem;
+      color: #555555;
+      font-family: 'Padauk', sans-serif;
+      margin-bottom: 25px;
+      font-weight: 700;
+    }
+
+    /* Action Buttons Area */
+    .btn-group {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      min-height: 70px;
+      width: 100%;
+    }
+
+    .btn {
+      font-family: 'Fredoka', 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      padding: 14px 38px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    /* YES Button */
+    .btn-yes {
+      background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(255, 65, 108, 0.45);
+      animation: pulseYes 2s infinite ease-in-out;
+      z-index: 2;
+    }
+
+    @keyframes pulseYes {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+
+    .btn-yes:hover {
+      transform: scale(1.12) !important;
+      box-shadow: 0 14px 30px rgba(255, 65, 108, 0.6);
+    }
+
+    /* Runaway NO Button */
+    .btn-no {
+      background: #f1f2f6;
+      color: #57606f;
+      border: 2px solid #ced6e0;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+      z-index: 3;
+      transition: all 0.18s ease-out;
+    }
+
+    /* Celebration Screen */
+    .celebration-view {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: zoomIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes zoomIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .celebration-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #ff2a6d;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 10px rgba(255, 42, 109, 0.25);
+    }
+
+    .celebration-desc {
+      font-size: 1.18rem;
+      color: #333333;
+      font-family: 'Padauk', sans-serif;
+      margin-top: 6px;
+      line-height: 1.6;
+      font-weight: 700;
+    }
+
+    .date-badge {
+      display: inline-block;
+      margin-top: 18px;
+      background: #ffe3e8;
+      color: #ff3366;
+      padding: 9px 22px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 2px dashed #ff4b72;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 30px 18px 35px; border-radius: 26px; }
+      .question-title { font-size: 1.65rem; }
+      .question-sub { font-size: 0.98rem; margin-bottom: 22px; }
+      .btn { font-size: 1.15rem; padding: 12px 30px; }
+      .sticker-wrapper { width: 155px; height: 150px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Card Container -->
+  <div class="card" id="mainCard">
+
+    <!-- QUESTION VIEW -->
+    <div id="questionView">
+      
+      <!-- Pentol / Quby Sticker Vector (Pure SVG - Never Breaks!) -->
+      <div class="sticker-wrapper" id="stickerWrapper">
+        <svg id="stickerSvg" class="sticker-svg bounce-character" viewBox="0 0 200 200">
+          <!-- Body -->
+          <path d="M75,115 C55,145 68,180 95,182 C115,183 125,160 115,135 C110,120 100,115 88,115 Z" fill="#ffffff" stroke="#111111" stroke-width="4.5" stroke-linejoin="round" />
+          <ellipse cx="85" cy="183" rx="10" ry="5" fill="#ffffff" stroke="#111111" stroke-width="4" />
+          <ellipse cx="108" cy="183" rx="9" ry="5" fill="#ffffff" stroke="#111111" stroke-width="4" />
+          <!-- Head -->
+          <path d="M42,92 C32,50 68,22 110,24 C155,26 172,60 162,96 C152,130 115,135 82,130 C58,126 48,115 42,92 Z" fill="#ffffff" stroke="#111111" stroke-width="5" stroke-linejoin="round" />
+          <!-- Blushing Cheeks -->
+          <ellipse cx="62" cy="96" rx="12" ry="7" fill="#ff9cb0" />
+          <ellipse cx="140" cy="98" rx="12" ry="7" fill="#ff9cb0" />
+          <!-- Eyes & Smile -->
+          <circle cx="82" cy="85" r="4.5" fill="#111111" />
+          <circle cx="122" cy="86" r="4.5" fill="#111111" />
+          <path d="M96,93 Q102,100 108,93" fill="none" stroke="#111111" stroke-width="3.5" stroke-linecap="round" />
+          <!-- Shy Hands -->
+          <path d="M68,130 C58,140 64,152 74,150" fill="none" stroke="#111111" stroke-width="4" stroke-linecap="round" />
+        </svg>
+      </div>
+
+      <h1 class="question-title">Will you go out with me? 🥺</h1>
+      <p class="question-sub">ငါ့ရဲ့ ကောင်မလေး ဖြစ်ပေးမလား? 🥰</p>
+
+      <div class="btn-group" id="btnGroup">
+        <button class="btn btn-yes" id="yesBtn">YES! 🥰</button>
+        <button class="btn btn-no" id="noBtn">NO 😢</button>
+      </div>
+    </div>
+
+    <!-- CELEBRATION VIEW -->
+    <div class="celebration-view" id="celebrationView">
+      <div class="sticker-wrapper">
+        <svg class="sticker-svg bounce-character" viewBox="0 0 200 200">
+          <path d="M45,45 C45,35 55,30 62,38 C69,30 79,35 79,45 C79,58 62,68 62,68 C62,68 45,58 45,45 Z" fill="#ff3366" />
+          <path d="M135,35 C135,27 143,23 148,29 C153,23 161,27 161,35 C161,45 148,53 148,53 C148,53 135,45 135,35 Z" fill="#ff3366" />
+          <!-- Body -->
+          <path d="M72,115 C58,140 70,178 96,180 C118,181 126,155 116,132 Z" fill="#ffffff" stroke="#111111" stroke-width="4.5" stroke-linejoin="round" />
+          <ellipse cx="86" cy="182" rx="10" ry="5" fill="#ffffff" stroke="#111111" stroke-width="4" />
+          <ellipse cx="110" cy="180" rx="9" ry="5" fill="#ffffff" stroke="#111111" stroke-width="4" />
+          <!-- Head -->
+          <path d="M42,92 C32,50 68,22 110,24 C155,26 172,60 162,96 C152,130 115,135 82,130 C58,126 48,115 42,92 Z" fill="#ffffff" stroke="#111111" stroke-width="5" stroke-linejoin="round" />
+          <ellipse cx="60" cy="95" rx="14" ry="8" fill="#ff758c" />
+          <ellipse cx="140" cy="97" rx="14" ry="8" fill="#ff758c" />
+          <path d="M74,84 Q82,75 90,84" fill="none" stroke="#111111" stroke-width="4" stroke-linecap="round" />
+          <path d="M114,85 Q122,76 130,85" fill="none" stroke="#111111" stroke-width="4" stroke-linecap="round" />
+          <path d="M96,96 Q102,112 108,96 Z" fill="#ff477e" stroke="#111111" stroke-width="3.5" />
+          <path d="M52,122 C42,108 35,95 46,92" fill="none" stroke="#111111" stroke-width="4.5" stroke-linecap="round" />
+          <path d="M136,120 C146,108 155,95 145,92" fill="none" stroke="#111111" stroke-width="4.5" stroke-linecap="round" />
+        </svg>
+      </div>
+
+      <h2 class="celebration-title">YAAAY! I KNEW IT! ❤️</h2>
+      <p class="celebration-desc">YES လို့ ဖြေမယ်ဆိုတာ အစကတည်းက သိပြီးသားပါကွာ! 🥰</p>
+      <div class="date-badge">Official Date Confirmed 🔒✨</div>
+    </div>
+
+  </div>
+
+  <script>
+    // 1. Floating background hearts
+    const heartSymbols = ['💖', '💕', '💗', '🌸', '✨', '❤️'];
+    for (let i = 0; i < 22; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'bg-heart';
+      heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+      heart.style.left = `${Math.random() * 100}vw`;
+      heart.style.animationDuration = `${4 + Math.random() * 5}s`;
+      heart.style.animationDelay = `${Math.random() * 5}s`;
+      heart.style.fontSize = `${16 + Math.random() * 20}px`;
+      document.body.appendChild(heart);
+    }
+
+    // 2. Runaway "NO" Button Logic
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const questionView = document.getElementById('questionView');
+    const celebrationView = document.getElementById('celebrationView');
+    const stickerWrapper = document.getElementById('stickerWrapper');
+
+    // Telegram Crying Pentol / Quby Sticker Vector
+    const cryingSvg = `
+      <svg class="sticker-svg crying-character" viewBox="0 0 200 150">
+        <path d="M25,115 C20,95 45,90 70,105 C100,108 140,110 165,115 C175,125 155,135 125,132 C75,135 30,130 25,115 Z" fill="#ffffff" stroke="#111111" stroke-width="4.5" stroke-linejoin="round" />
+        <path d="M60,110 C35,80 40,40 75,25 C120,12 155,35 155,75 C155,110 120,125 90,120 C75,118 68,115 60,110 Z" fill="#ffffff" stroke="#111111" stroke-width="5" stroke-linejoin="round" />
+        <ellipse cx="82" cy="85" rx="12" ry="7" fill="#ff9cb0" />
+        <ellipse cx="140" cy="88" rx="11" ry="6" fill="#ff9cb0" />
+        <path d="M102,72 Q108,66 114,72" fill="none" stroke="#111111" stroke-width="4" stroke-linecap="round" />
+        <path d="M132,74 Q138,68 144,74" fill="none" stroke="#111111" stroke-width="4" stroke-linecap="round" />
+        <path d="M120,86 Q126,92 132,86" fill="none" stroke="#111111" stroke-width="3" stroke-linecap="round" />
+        <!-- Blue Stream of Tears flowing down -->
+        <path d="M108,76 C105,95 106,115 110,130" fill="none" stroke="#4fc3f7" stroke-width="6" stroke-linecap="round" />
+        <path d="M138,78 C135,98 136,118 140,132" fill="none" stroke="#4fc3f7" stroke-width="6" stroke-linecap="round" />
+        <path d="M108,76 C105,95 106,115 110,130" fill="none" stroke="#29b6f6" stroke-width="3" stroke-linecap="round" />
+        <path d="M138,78 C135,98 136,118 140,132" fill="none" stroke="#29b6f6" stroke-width="3" stroke-linecap="round" />
+      </svg>
+    `;
+
+    let noClickCount = 0;
+    let yesScale = 1;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playPop(freq = 400) {
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+      } catch(e) {}
+    }
+
+    function runaway() {
+      playPop(300 + Math.random() * 300);
+
+      // NO နှိပ်ဖို့ ကြိုးစားတိုင်း မျက်ရည်ကျကာ ငိုနေသည့်ပုံစံသို့ ပြောင်းသွားခြင်း
+      if (noClickCount === 0) {
+        stickerWrapper.innerHTML = cryingSvg;
+      }
+
+      yesScale += 0.12;
+      yesBtn.style.transform = `scale(${yesScale})`;
+      noClickCount++;
+
+      const funnyProtests = [
+        "NO 😢",
+        "Wait, think again! 🥺",
+        "Are you sure? 💔",
+        "Can't click me! 😜",
+        "Misclick right? 😭",
+        "Please say YES! ❤️"
+      ];
+      noBtn.textContent = funnyProtests[noClickCount % funnyProtests.length];
+
+      const padding = 30;
+      const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+      const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+      const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = `${randomX}px`;
+      noBtn.style.top = `${randomY}px`;
+    }
+
+    noBtn.addEventListener('mouseenter', runaway);
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      runaway();
+    });
+    noBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      runaway();
+    });
+
+    // 3. YES နှိပ်လိုက်လျှင် Confetti ပေါက်ကွဲခြင်း
+    yesBtn.addEventListener('click', () => {
+      questionView.style.display = 'none';
+      celebrationView.style.display = 'flex';
+      noBtn.style.display = 'none';
+      fireConfetti();
+    });
+
+    function fireConfetti() {
+      [440, 554, 659, 880].forEach((f, i) => setTimeout(() => playPop(f), i * 120));
+
+      const count = 200;
+      const defaults = { origin: { y: 0.7 } };
+
+      function fire(particleRatio, opts) {
+        confetti({
+          ...defaults,
+          ...opts,
+          particleCount: Math.floor(count * particleRatio)
+        });
+      }
+
+      fire(0.25, { spread: 26, startVelocity: 55 });
+      fire(0.2, { spread: 60 });
+      fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+      fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+      fire(0.1, { spread: 120, startVelocity: 45 });
+
+      const duration = 3 * 1000;
+      const animationEnd = Date.now() + duration;
+
+      const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+        if (timeLeft <= 0) return clearInterval(interval);
+
+        confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0 } });
+        confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1 } });
+      }, 250);
+    }
+  </script>
+</body>
+</html>

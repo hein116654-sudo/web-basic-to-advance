@@ -1,0 +1,73 @@
+<form>
+
+    <fieldset>
+
+        <legend>Personal Information</legend>
+
+        <p>
+            <label for="fullname">
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="fullname"
+                name="fullname"
+                required
+            >
+        </p>
+
+        <p>
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                required
+            >
+        </p>
+
+    </fieldset>
+
+
+    <fieldset>
+
+        <legend>Additional Information</legend>
+
+        <p>
+            <label for="bio">
+                Biography
+            </label>
+
+            <textarea
+                id="bio"
+                name="bio"
+                rows="5"
+                cols="40"
+            ></textarea>
+        </p>
+
+        <p>
+            <label for="avatar">
+                Profile Image
+            </label>
+
+            <input
+                type="file"
+                id="avatar"
+                name="avatar"
+                accept="image/*"
+            >
+        </p>
+
+    </fieldset>
+
+
+    <button type="submit">
+        Create Account
+    </button>
+
+</form>

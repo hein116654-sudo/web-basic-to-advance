@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Love Pharmacy - စိတ်ကောက်ပြေဆေးခန်း 💊💖</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffd3e2 0%, #ffc2d4 40%, #e2d4f0 100%);
+      font-family: 'Plus Jakarta Sans', 'Padauk', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      color: #4a2839;
+      overflow-x: hidden;
+    }
+
+    /* TikTok Mobile Frame */
+    .app-card {
+      width: 100%;
+      max-width: 410px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 3px solid #ffffff;
+      border-radius: 36px;
+      padding: 26px 18px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(255, 94, 142, 0.28);
+      position: relative;
+    }
+
+    .clinic-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      background: #ffe3ee;
+      color: #ff3377;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255, 51, 119, 0.2);
+    }
+
+    h1 {
+      font-size: clamp(22px, 6vw, 27px);
+      font-weight: 800;
+      color: #e62263;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+
+    /* Patient Medical Chart Box */
+    .patient-chart {
+      background: #fff8fb;
+      border: 2px dashed #ffb3cc;
+      border-radius: 20px;
+      padding: 12px 16px;
+      margin: 14px 0 20px;
+      text-align: left;
+      font-size: 13px;
+      line-height: 1.8;
+      color: #7b435b;
+    }
+
+    .chart-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .chart-row span.val {
+      font-weight: 700;
+      color: #e62263;
+    }
+
+    /* BLISTER PACK (ဆေးကတ် ဒီဇိုင်း) */
+    .blister-pack {
+      background: linear-gradient(145deg, #ffffff, #f0f3f8);
+      border-radius: 28px;
+      padding: 20px 14px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), inset 0 2px 4px #ffffff, 0 0 0 2px #e1e7f0;
+      margin-bottom: 20px;
+    }
+
+    .pack-header {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #9aa8bd;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 8px;
+    }
+
+    .pill-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px 12px;
+      justify-items: center;
+    }
+
+    /* Individual Capsule Pocket */
+    .pill-pocket {
+      width: 82px;
+      height: 98px;
+      background: radial-gradient(circle, #f8fafd, #e3eaf3);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 4px 8px rgba(0,0,0,0.06), 0 3px 6px rgba(0,0,0,0.04);
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .pill-pocket:active {
+      transform: scale(0.92);
+    }
+
+    .pill-pocket.popped {
+      background: #ece8ee;
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.15);
+    }
+
+    /* Realistic 3D Pill Capsule */
+    .capsule {
+      width: 32px;
+      height: 64px;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18), inset 2px 2px 4px rgba(255,255,255,0.7);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .capsule::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 3px;
+      width: 6px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 10px;
+    }
+
+    .capsule .half {
+      flex: 1;
+      width: 100%;
+    }
+
+    .pill-number {
+      font-size: 11px;
+      font-weight: 700;
+      color: #9aa8bd;
+      margin-top: 6px;
+    }
+
+    /* Pop Animation */
+    .popping {
+      animation: capsuleCrack 0.5s forwards ease-in-out;
+    }
+
+    @keyframes capsuleCrack {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.25) rotate(-10deg); }
+      70% { transform: scale(0.8) rotate(15deg); opacity: 0.8; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+
+    .instructions {
+      font-size: 14px;
+      color: #7b435b;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+
+    /* =======================================
+       PRESCRIPTION SHEET MODAL
+       ======================================= */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(40, 10, 25, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .prescription-sheet {
+      background: #ffffff;
+      border: 3px solid #ffccd9;
+      border-radius: 30px;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 340px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(255, 51, 119, 0.4);
+      transform: scale(0.85);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+
+    .modal-backdrop.active .prescription-sheet {
+      transform: scale(1);
+    }
+
+    .rx-stamp {
+      font-family: 'Caveat', cursive;
+      font-size: 38px;
+      font-weight: 700;
+      color: #ff3377;
+      text-align: left;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .sheet-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #e62263;
+      margin-bottom: 12px;
+    }
+
+    .medicine-card {
+      background: linear-gradient(135deg, #fff0f6, #ffe5ee);
+      border: 2px dashed #ff99bb;
+      border-radius: 20px;
+      padding: 18px 14px;
+      margin-bottom: 16px;
+    }
+
+    .med-emoji {
+      font-size: 38px;
+      display: inline-block;
+      margin-bottom: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .med-name {
+      font-size: 19px;
+      font-weight: 800;
+      color: #d62262;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .med-dosage {
+      font-size: 14px;
+      color: #55223c;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .doctor-sign {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 6px;
+      margin-bottom: 18px;
+      font-size: 12px;
+      color: #8c5d72;
+    }
+
+    .doctor-sign .sign {
+      font-family: 'Caveat', cursive;
+      font-size: 26px;
+      color: #ff3377;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .btn-claim {
+      width: 100%;
+      background: linear-gradient(135deg, #ff5d9e, #ed4388);
+      color: white;
+      border: none;
+      border-radius: 22px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(237, 67, 136, 0.35);
+      margin-bottom: 10px;
+    }
+
+    .btn-another {
+      background: none;
+      border: none;
+      color: #a36c84;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="app-card">
+    <div class="clinic-badge">🏥 LOVE CLINIC & PHARMACY</div>
+    <h1>စိတ်ကောက်ပြေ ဆေးခန်း 💊</h1>
+
+    <!-- လူနာမှတ်တမ်းကတ် (TikTok Hook) -->
+    <div class="patient-chart">
+      <div class="chart-row">
+        <span>လူနာအမည်:</span>
+        <span class="val">ကိုယ့်ရဲ့ အသဲလေး 🌸</span>
+      </div>
+      <div class="chart-row">
+        <span>ရောဂါလက္ခဏာ:</span>
+        <span class="val">စိတ်ကောက်၊ နှုတ်ခမ်းစူ၊ ချွဲချင်ခြင်း 🥺</span>
+      </div>
+      <div class="chart-row">
+        <span>တာဝန်ကျဆရာဝန်:</span>
+        <span class="val">Dr. ကိုကို (အချစ်အထူးကု) 🩺</span>
+      </div>
+    </div>
+
+    <!-- ဆေးကတ် (BLISTER PACK) -->
+    <div class="blister-pack">
+      <div class="pack-header">
+        <span>LOVE CAPSULES 500MG</span>
+        <span>EXP: ထာဝရ</span>
+      </div>
+
+      <div class="pill-grid" id="pillGrid">
+        <!-- Javascript မှ Capsule ၆ ခုကို အလိုအလျောက် ဖြည့်ဆည်းပေးပါမည် -->
+      </div>
+    </div>
+
+    <p class="instructions">
+      👉 ကြိုက်တဲ့ ဆေးတောင့်ကို <b>လက်နဲ့ဖောက်ပြီး</b><br>
+      စိတ်ကောက်ပြေအောင် သောက်လိုက်နော် အသဲလေး 💖
+    </p>
+  </main>
+
+  <!-- CUSTOM MEDICAL PRESCRIPTION MODAL -->
+  <div class="modal-backdrop" id="rxModal">
+    <div class="prescription-sheet">
+      <div class="rx-stamp">℞</div>
+      <h3 class="sheet-title">တရားဝင် စိတ်ကောက်ပြေ ဆေးညွှန်း</h3>
+
+      <div class="medicine-card">
+        <span class="med-emoji" id="rxEmoji">🧋</span>
+        <span class="med-name" id="rxName">Bubble Tea ဆေးလုံး</span>
+        <p class="med-dosage" id="rxDosage">စိတ်ကောက်ပြေစေရန် အချို ၁၀၀% ဖြင့် ချက်ချင်းသောက်သုံးပါ</p>
+      </div>
+
+      <div class="doctor-sign">
+        <div>
+          <span>ရက်စွဲ:</span> <b>ယနေ့မှစ၍ အမြဲတမ်း</b>
+        </div>
+        <div>
+          <div>ဆရာဝန်လက်မှတ်:</div>
+          <div class="sign">Dr. Ko Ko ❤️</div>
+        </div>
+      </div>
+
+      <button class="btn-claim" onclick="claimPrescription()">
+        📸 Screenshot ရိုက်ပြီး ဆေးတောင်းမယ် 💖
+      </button>
+
+      <div>
+        <button class="btn-another" onclick="closeModal()">
+          နောက်ထပ် ဆေးတောင့်တစ်ခု ထပ်ဖောက်မယ် ↻
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // စိတ်ကောက်ပြေ ဆေးညွှန်းများနှင့် Capsule အရောင်စပ်များ
+    const prescriptions = [
+      {
+        emoji: "🧋",
+        name: "Bubble Tea အရေးပေါ်ဆေးညွှန်း",
+        dosage: "ကြိုက်တဲ့ဆိုင်က Bubble Tea ကို ကြိုက်တဲ့ Topping အပြည့်နဲ့ စိတ်တိုင်းကျ သောက်ခွင့်ပေးပါသည် 🥰",
+        colorTop: "#ff5e7e",
+        colorBottom: "#ffffff"
+      },
+      {
+        emoji: "💸",
+        name: "မုန့်ဖိုး အမြန်ပြေ အာမခံဆေး",
+        dosage: "အသဲလေး စိတ်ပြေလက်ပျောက် Online Shopping ထွက်ဖို့ မုန့်ဖိုး KPay ကနေ ချက်ချင်းလွှဲပေးပါမည် 💸",
+        colorTop: "#ffa41b",
+        colorBottom: "#ff5e7e"
+      },
+      {
+        emoji: "👑",
+        name: "တစ်နေကုန် အလိုလိုက်ခံရခွင့်",
+        dosage: "ဒီနေ့တစ်ရက်လုံး ဘာပဲဂျီကျကျ၊ ဘာပဲခိုင်းခိုင်း ကိုကိုက ပြုံးပြုံးလေးနဲ့ အကုန်လိုက်လုပ်ပေးရမည် 👑",
+        colorTop: "#a056ff",
+        colorBottom: "#ffffff"
+      },
+      {
+        emoji: "🥘",
+        name: "မာလာရှမ်းကော / Hotpot ဆေးလုံး",
+        dosage: "စိတ်ကောက်တာ ဗိုက်ဆာလို့ပါ! အသဲလေး ကြိုက်တဲ့ ဟော့ပေါ့ (သို့) အကင်ဆိုင် ချက်ချင်း ခေါ်သွားပါမည် 😋",
+        colorTop: "#00c9a7",
+        colorBottom: "#ffffff"
+      },
+      {
+        emoji: "🫂",
+        name: "ပွေ့ဖက်ခြင်း အကြိမ် (၁၀၀)",
+        dosage: "စိတ်မကောင်းဖြစ်စရာတွေ အကုန်မေ့သွားအောင် ရင်ခွင်ထဲမှာ တင်းတင်းကြပ်ကြပ် ဖက်ထားပေးပါမည် 🥺💗",
+        colorTop: "#ff758c",
+        colorBottom: "#ffd166"
+      },
+      {
+        emoji: "😘",
+        name: "ပါးဖောင်းဖောင်း အသည်းယားဆေး",
+        dosage: "စိတ်ကောက်နေတဲ့ ပါးဖောင်းဖောင်းလေးကို စိတ်ပြေသွားတဲ့အထိ တရစပ် အနမ်းပေးခြင်းဖြင့် ကုသပါမည် ❤️",
+        colorTop: "#4d80e6",
+        colorBottom: "#ff7597"
+      }
+    ];
+
+    const grid = document.getElementById("pillGrid");
+    const modal = document.getElementById("rxModal");
+
+    // Realistic Web Audio Pop & Chime
+    let audioCtx = null;
+
+    function playPopSound() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      } catch (e) {}
+    }
+
+    function playChime() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const notes = [659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.08, audioCtx.currentTime + idx * 0.1);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.1 + 0.4);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + idx * 0.1);
+          osc.stop(audioCtx.currentTime + idx * 0.1 + 0.4);
+        });
+      } catch (e) {}
+    }
+
+    // ဆေးကတ်ပေါ်တွင် ဆေးတောင့်များကို တည်ဆောက်ခြင်း
+    prescriptions.forEach((rx, index) => {
+      const pocket = document.createElement("div");
+      pocket.className = "pill-pocket";
+      pocket.id = `pocket-${index}`;
+      pocket.onclick = () => popCapsule(index, pocket);
+
+      pocket.innerHTML = `
+        <div class="capsule" id="capsule-${index}">
+          <div class="half" style="background: ${rx.colorTop};"></div>
+          <div class="half" style="background: ${rx.colorBottom};"></div>
+        </div>
+        <span class="pill-number">No. 0${index + 1}</span>
+      `;
+      grid.appendChild(pocket);
+    });
+
+    // ဆေးတောင့်ကို ဖောက်သည့် လုပ်ဆောင်ချက်
+    function popCapsule(index, pocketElem) {
+      if (pocketElem.classList.contains("popped")) return;
+
+      playPopSound();
+      const capsule = document.getElementById(`capsule-${index}`);
+      capsule.classList.add("popping");
+
+      setTimeout(() => {
+        pocketElem.classList.add("popped");
+        openPrescription(index);
+      }, 350);
+    }
+
+    // ဆေးညွှန်းစာရွက် ဖွင့်ပြခြင်း
+    function openPrescription(index) {
+      const item = prescriptions[index];
+      document.getElementById("rxEmoji").textContent = item.emoji;
+      document.getElementById("rxName").textContent = item.name;
+      document.getElementById("rxDosage").textContent = item.dosage;
+
+      playChime();
+      confetti({
+        particleCount: 100,
+        spread: 75,
+        origin: { y: 0.6 }
+      });
+
+      modal.classList.add("active");
+    }
+
+    function closeModal() {
+      modal.classList.remove("active");
+    }
+
+    function claimPrescription() {
+      confetti({
+        particleCount: 120,
+        spread: 90,
+        origin: { y: 0.5 }
+      });
+      alert = null; // Ensure no browser alert
+      closeModal();
+    }
+  </script>
+</body>
+</html>

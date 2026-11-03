@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Funtction</h2>
+    <script>
+
+        //normal function
+        function greetName(username = 'Su Su') {
+            return `Hello, ${username}`;
+        }
+
+        console.log(greetName('Mg Mg'));
+        console.log(greetName());
+
+        //arrow function (javascript style)
+
+        const multiply = (x, y) => x * y;
+        console.log('Multiplication of (5 x 4): ',multiply(5, 4));
+
+    </script>
+</body>
+</html>

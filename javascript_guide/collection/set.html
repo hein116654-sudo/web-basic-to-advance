@@ -1,0 +1,963 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JavaScript Set Study</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .intro,
+        .section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .highlight {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        button {
+            border: none;
+            padding: 10px 16px;
+            margin: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #2563eb;
+            color: white;
+            font-size: 14px;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        pre {
+            background: #111827;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+
+        .output {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            min-height: 40px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ================================= -->
+    <!-- INTRO -->
+    <!-- ================================= -->
+
+    <div class="intro">
+
+        <h1>JavaScript Set</h1>
+
+        <p>
+            A <span class="highlight">Set</span> is a collection
+            that stores <strong>unique values</strong>.
+        </p>
+
+        <p>
+            A Set does not allow duplicate values.
+        </p>
+
+        <pre>
+const numbers = new Set();
+
+numbers.add(10);
+numbers.add(20);
+numbers.add(10);
+
+console.log(numbers);
+        </pre>
+
+        <p>
+            Output:
+        </p>
+
+        <pre>
+Set(2) {10, 20}
+        </pre>
+
+        <p>
+            Notice that <strong>10</strong> was added twice,
+            but Set kept only one 10.
+        </p>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 1. CREATE SET -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>1. Create a Set</h2>
+
+        <pre>
+const ids = new Set();
+
+console.log(ids);
+        </pre>
+
+        <button onclick="createSetExample()">
+            Run Example
+        </button>
+
+        <div id="createOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 2. CREATE WITH VALUES -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>2. Create Set with Initial Values</h2>
+
+        <pre>
+const ids = new Set([2, 4, 5, 6]);
+
+console.log(ids);
+        </pre>
+
+        <button onclick="initialValuesExample()">
+            Run Example
+        </button>
+
+        <div id="initialOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 3. ADD -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>3. add() — Add Value</h2>
+
+        <p>
+            <code>add()</code> is used to add a value to a Set.
+        </p>
+
+        <pre>
+const cars = new Set();
+
+cars.add("BMW");
+cars.add("Mercedes");
+cars.add("Audi");
+cars.add("Porsche");
+        </pre>
+
+        <button onclick="addExample()">
+            Run Example
+        </button>
+
+        <div id="addOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 4. DUPLICATE -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>4. Duplicate Values</h2>
+
+        <p>
+            Set automatically removes duplicate values.
+        </p>
+
+        <pre>
+const numbers = new Set();
+
+numbers.add(10);
+numbers.add(20);
+numbers.add(10);
+numbers.add(20);
+numbers.add(30);
+        </pre>
+
+        <button onclick="duplicateExample()">
+            Run Example
+        </button>
+
+        <div id="duplicateOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 5. DELETE -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>5. delete() — Remove Value</h2>
+
+        <pre>
+const cars = new Set([
+    "BMW",
+    "Mercedes",
+    "Audi"
+]);
+
+cars.delete("Mercedes");
+        </pre>
+
+        <button onclick="deleteExample()">
+            Run Example
+        </button>
+
+        <div id="deleteOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 6. HAS -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>6. has() — Check Value</h2>
+
+        <pre>
+const numbers = new Set([
+    10,
+    20,
+    30
+]);
+
+numbers.has(20);
+numbers.has(100);
+        </pre>
+
+        <button onclick="hasExample()">
+            Run Example
+        </button>
+
+        <div id="hasOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 7. VALUES -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>7. values() — Get Values</h2>
+
+        <pre>
+const vegetables = new Set([
+    "Carrot",
+    "Potato",
+    "Onion"
+]);
+
+for (const vegetable of vegetables.values()) {
+    console.log(vegetable);
+}
+        </pre>
+
+        <button onclick="valuesExample()">
+            Run Example
+        </button>
+
+        <div id="valuesOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 8. FOR OF -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>8. for...of — Loop Through Set</h2>
+
+        <pre>
+const fruits = new Set([
+    "Apple",
+    "Banana",
+    "Orange"
+]);
+
+for (const fruit of fruits) {
+    console.log(fruit);
+}
+        </pre>
+
+        <button onclick="forOfExample()">
+            Run Example
+        </button>
+
+        <div id="forOfOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 9. ENTRIES -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>9. entries() — Get Entries</h2>
+
+        <p>
+            Set  <code>entries()</code> is
+            <strong>[value, value]</strong> return
+        </p>
+
+        <pre>
+const numbers = new Set([
+    10,
+    20,
+    30
+]);
+
+const entries = numbers.entries();
+
+console.log(entries.next().value);
+        </pre>
+
+        <button onclick="entriesExample()">
+            Run Example
+        </button>
+
+        <div id="entriesOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 10. FOREACH -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>10. forEach() — Loop Through Set</h2>
+
+        <pre>
+const fruits = new Set([
+    "Apple",
+    "Banana",
+    "Orange"
+]);
+
+fruits.forEach((value) => {
+    console.log(value);
+});
+        </pre>
+
+        <button onclick="forEachExample()">
+            Run Example
+        </button>
+
+        <div id="forEachOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 11. CLEAR -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>11. clear() — Remove Everything</h2>
+
+        <pre>
+const numbers = new Set([
+    10,
+    20,
+    30
+]);
+
+numbers.clear();
+
+console.log(numbers);
+        </pre>
+
+        <button onclick="clearExample()">
+            Run Example
+        </button>
+
+        <div id="clearOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 12. SIZE -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>12. size — Number of Values</h2>
+
+        <pre>
+const numbers = new Set([
+    10,
+    20,
+    30,
+    40
+]);
+
+console.log(numbers.size);
+        </pre>
+
+        <button onclick="sizeExample()">
+            Run Example
+        </button>
+
+        <div id="sizeOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 13. DIFFERENT DATA TYPES -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>13. Set Can Store Different Data Types</h2>
+
+        <pre>
+const data = new Set();
+
+data.add(100);
+data.add("Hello");
+data.add(true);
+data.add(null);
+data.add(undefined);
+        </pre>
+
+        <button onclick="differentTypesExample()">
+            Run Example
+        </button>
+
+        <div id="typesOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 14. ARRAY TO SET -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>14. Remove Duplicate Values from Array</h2>
+
+        <p>
+            This is one of the most useful real-world uses of Set.
+        </p>
+
+        <pre>
+const numbers = [
+    10,
+    20,
+    10,
+    30,
+    20,
+    40
+];
+
+const uniqueNumbers = [
+    ...new Set(numbers)
+];
+
+console.log(uniqueNumbers);
+        </pre>
+
+        <button onclick="removeDuplicatesExample()">
+            Remove Duplicates
+        </button>
+
+        <div id="removeDuplicateOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- 15. SET TO ARRAY -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>15. Convert Set to Array</h2>
+
+        <pre>
+const numbers = new Set([
+    10,
+    20,
+    30
+]);
+
+const array = [...numbers];
+        </pre>
+
+        <button onclick="setToArrayExample()">
+            Convert
+        </button>
+
+        <div id="arrayOutput" class="output"></div>
+
+    </div>
+
+
+    <!-- ================================= -->
+    <!-- SUMMARY -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2>Set Methods Summary</h2>
+
+        <pre>
+new Set()       → Create Set
+
+add()           → Add value
+delete()        → Delete value
+has()           → Check value
+clear()         → Delete everything
+
+values()        → Get values
+entries()       → Get [value, value]
+forEach()       → Loop through Set
+
+size            → Number of values
+        </pre>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // =========================================
+    // 1. CREATE SET
+    // =========================================
+
+    function createSetExample() {
+
+        const ids = new Set();
+
+        document.getElementById("createOutput").textContent =
+            "Set created successfully!\n\n" +
+            "Size: " + ids.size;
+
+    }
+
+
+    // =========================================
+    // 2. INITIAL VALUES
+    // =========================================
+
+    function initialValuesExample() {
+
+        const ids = new Set([
+            2,
+            4,
+            5,
+            6
+        ]);
+
+        document.getElementById("initialOutput").textContent =
+            JSON.stringify([...ids]);
+
+    }
+
+
+    // =========================================
+    // 3. ADD
+    // =========================================
+
+    function addExample() {
+
+        const cars = new Set();
+
+        cars.add("BMW");
+        cars.add("Mercedes");
+        cars.add("Audi");
+        cars.add("Porsche");
+
+        document.getElementById("addOutput").textContent =
+            [...cars].join("\n");
+
+    }
+
+
+    // =========================================
+    // 4. DUPLICATE
+    // =========================================
+
+    function duplicateExample() {
+
+        const numbers = new Set();
+
+        numbers.add(10);
+        numbers.add(20);
+        numbers.add(10);
+        numbers.add(20);
+        numbers.add(30);
+
+        document.getElementById("duplicateOutput").textContent =
+            "Original adds:\n" +
+            "10, 20, 10, 20, 30\n\n" +
+
+            "Set result:\n" +
+            [...numbers].join(", ") +
+
+            "\n\nSize: " +
+            numbers.size;
+
+    }
+
+
+    // =========================================
+    // 5. DELETE
+    // =========================================
+
+    function deleteExample() {
+
+        const cars = new Set([
+            "BMW",
+            "Mercedes",
+            "Audi"
+        ]);
+
+        const deleted = cars.delete("Mercedes");
+
+        document.getElementById("deleteOutput").textContent =
+            "Deleted: " + deleted + "\n\n" +
+            "Remaining:\n" +
+            [...cars].join("\n");
+
+    }
+
+
+    // =========================================
+    // 6. HAS
+    // =========================================
+
+    function hasExample() {
+
+        const numbers = new Set([
+            10,
+            20,
+            30
+        ]);
+
+        const result1 = numbers.has(20);
+        const result2 = numbers.has(100);
+
+        document.getElementById("hasOutput").textContent =
+            "numbers.has(20) → " + result1 + "\n" +
+            "numbers.has(100) → " + result2;
+
+    }
+
+
+    // =========================================
+    // 7. VALUES
+    // =========================================
+
+    function valuesExample() {
+
+        const vegetables = new Set([
+            "Carrot",
+            "Potato",
+            "Onion"
+        ]);
+
+        let result = "";
+
+        for (const vegetable of vegetables.values()) {
+
+            result += vegetable + "\n";
+
+        }
+
+        document.getElementById("valuesOutput").textContent =
+            result;
+
+    }
+
+
+    // =========================================
+    // 8. FOR OF
+    // =========================================
+
+    function forOfExample() {
+
+        const fruits = new Set([
+            "Apple",
+            "Banana",
+            "Orange"
+        ]);
+
+        let result = "";
+
+        for (const fruit of fruits) {
+
+            result += fruit + "\n";
+
+        }
+
+        document.getElementById("forOfOutput").textContent =
+            result;
+
+    }
+
+
+    // =========================================
+    // 9. ENTRIES
+    // =========================================
+
+    function entriesExample() {
+
+        const numbers = new Set([
+            10,
+            20,
+            30
+        ]);
+
+        const entries = numbers.entries();
+
+        let result = "";
+
+        result += JSON.stringify(entries.next().value) + "\n";
+        result += JSON.stringify(entries.next().value) + "\n";
+        result += JSON.stringify(entries.next().value) + "\n";
+
+        document.getElementById("entriesOutput").textContent =
+            result;
+
+    }
+
+
+    // =========================================
+    // 10. FOREACH
+    // =========================================
+
+    function forEachExample() {
+
+        const fruits = new Set([
+            "Apple",
+            "Banana",
+            "Orange"
+        ]);
+
+        let result = "";
+
+        fruits.forEach((value) => {
+
+            result += value + "\n";
+
+        });
+
+        document.getElementById("forEachOutput").textContent =
+            result;
+
+    }
+
+
+    // =========================================
+    // 11. CLEAR
+    // =========================================
+
+    function clearExample() {
+
+        const numbers = new Set([
+            10,
+            20,
+            30
+        ]);
+
+        numbers.clear();
+
+        document.getElementById("clearOutput").textContent =
+            "Set cleared!\n\n" +
+            "Size: " + numbers.size;
+
+    }
+
+
+    // =========================================
+    // 12. SIZE
+    // =========================================
+
+    function sizeExample() {
+
+        const numbers = new Set([
+            10,
+            20,
+            30,
+            40
+        ]);
+
+        document.getElementById("sizeOutput").textContent =
+            "numbers.size = " + numbers.size;
+
+    }
+
+
+    // =========================================
+    // 13. DIFFERENT TYPES
+    // =========================================
+
+    function differentTypesExample() {
+
+        const data = new Set();
+
+        data.add(100);
+        data.add("Hello");
+        data.add(true);
+        data.add(null);
+        data.add(undefined);
+
+        let result = "";
+
+        data.forEach((value) => {
+
+            result +=
+                "Value: " +
+                String(value) +
+                " | Type: " +
+                typeof value +
+                "\n";
+
+        });
+
+        document.getElementById("typesOutput").textContent =
+            result;
+
+    }
+
+
+    // =========================================
+    // 14. REMOVE DUPLICATES
+    // =========================================
+
+    function removeDuplicatesExample() {
+
+        const numbers = [
+            10,
+            20,
+            10,
+            30,
+            20,
+            40
+        ];
+
+        const uniqueNumbers = [
+            ...new Set(numbers)
+        ];
+
+        document.getElementById("removeDuplicateOutput").textContent =
+            "Original Array:\n" +
+            numbers.join(", ") +
+
+            "\n\nUnique Array:\n" +
+            uniqueNumbers.join(", ");
+
+    }
+
+
+    // =========================================
+    // 15. SET TO ARRAY
+    // =========================================
+
+    function setToArrayExample() {
+
+        const numbers = new Set([
+            10,
+            20,
+            30
+        ]);
+
+        const array = [
+            ...numbers
+        ];
+
+        document.getElementById("arrayOutput").textContent =
+            "Set:\n" +
+            [...numbers].join(", ") +
+
+            "\n\nArray:\n" +
+            array.join(", ") +
+
+            "\n\nArray.isArray(array): " +
+            Array.isArray(array);
+
+    }
+
+</script>
+
+</body>
+</html>

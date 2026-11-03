@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ES6+ Features Demo</title>
+</head>
+<body>
+
+    <div>
+        <h2>ES6+ Features Demo</h2>
+
+        <!-- Spread Operator Output -->
+        <div>
+            <h3>1. Spread Operator (...)</h3>
+            <div>Merged Array: <strong id="spread-output">-</strong></div>
+        </div>
+
+        <!-- Rest Operator Output -->
+        <div>
+            <h3>2. Rest Operator (...)</h3>
+            <div>Leader: <strong id="rest-leader">-</strong></div>
+            <div>Members: <strong id="rest-members">-</strong></div>
+        </div>
+
+        <!-- Optional Chaining & Nullish Coalescing Output -->
+        <div>
+            <h3>3. Optional Chaining (?.) & Nullish Coalescing (??)</h3>
+            <div>Property Access: <strong id="chaining-output">-</strong></div>
+            <div>Fallback City: <strong id="nullish-output">-</strong></div>
+        </div>
+    </div>
+
+    <script>
+        console.log("\n===== ES6+ Features =====");
+
+        // 1. Spread Operator
+        const nums1 = [1, 2];
+        const nums2 = [...nums1, 3, 4];
+        console.log("Combined Array (Spread):", nums2);
+        document.getElementById("spread-output").textContent = JSON.stringify(nums2);
+
+        // 2. Rest Operator
+        const [leader, ...members] = ["Aung Aung", "Bo Bo", "Chit Chit"];
+        console.log("Leader:", leader);
+        console.log("Members:", members);
+
+        document.getElementById("rest-leader").textContent = leader;
+        document.getElementById("rest-members").textContent = JSON.stringify(members);
+
+        // 3. Optional Chaining & Nullish Coalescing
+        const person = { name: "Alice" };
+
+        // Optional Chaining
+        const undefinedCity = person?.address?.city;
+        console.log("Optional Chaining Result:", undefinedCity);
+        document.getElementById("chaining-output").textContent = String(undefinedCity);
+
+        // Nullish Coalescing
+        const city = person?.address?.city ?? "Yangon";
+        console.log("Fallback City (Nullish Coalescing):", city);
+        document.getElementById("nullish-output").textContent = city;
+    </script>
+
+</body>
+</html>

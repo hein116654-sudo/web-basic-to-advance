@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Romantic Journey & Love Certificate ❤️</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Noto+Sans+Myanmar:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+
+    <!-- Confetti & HTML2Canvas (ဓာတ်ပုံအဖြစ် ပြောင်းပေးမည့် Library) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Noto Sans Myanmar', 'Pyidaungsu', sans-serif;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 200, 220, 0.6), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(255, 170, 200, 0.6), transparent 35%),
+                linear-gradient(135deg, #ffeef4, #ffd4e5, #ffb8d2);
+            color: #4a2030;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px 15px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 750px;
+            max-width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 32px;
+            border: 2px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 0 25px 60px rgba(210, 50, 110, 0.18), 0 10px 25px rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(20px);
+            padding: 35px 30px;
+            position: relative;
+        }
+
+        /* Step Indicator */
+        .step-progress {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ffccd9;
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: #ff3366;
+            width: 32px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+        }
+
+        /* Steps */
+        .step-content {
+            display: none;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2.title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #b8144c;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            font-size: 13.5px;
+            color: #884b64;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        /* Input Styles */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #7a1c43;
+        }
+
+        .input-control {
+            width: 100%;
+            padding: 13px 18px;
+            border-radius: 16px;
+            border: 1.5px solid #ffb3c6;
+            background: #fff;
+            font-family: inherit;
+            font-size: 14.5px;
+            color: #333;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-control:focus {
+            border-color: #ff3366;
+            box-shadow: 0 0 12px rgba(255, 51, 102, 0.25);
+        }
+
+        /* Choice Cards Grid */
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .choice-card {
+            background: #fff;
+            border: 2px solid #ffd0dc;
+            border-radius: 20px;
+            padding: 16px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            user-select: none;
+        }
+
+        .choice-card:hover {
+            transform: translateY(-4px);
+            border-color: #ff4d79;
+            box-shadow: 0 8px 20px rgba(255, 77, 121, 0.18);
+        }
+
+        .choice-card.selected {
+            background: linear-gradient(145deg, #fff0f5, #ffe1eb);
+            border-color: #ff0055;
+            box-shadow: 0 10px 22px rgba(255, 0, 85, 0.22);
+            transform: scale(1.03);
+        }
+
+        .choice-card .icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .choice-card .text {
+            font-size: 13px;
+            font-weight: 700;
+            color: #8c1d47;
+        }
+
+        /* Action Buttons */
+        .action-btns {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 13px 28px;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.25s ease;
+        }
+
+        .btn-prev {
+            background: #ffe3ec;
+            color: #a82454;
+        }
+
+        .btn-prev:hover {
+            background: #ffd0e0;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #ff4071, #ff0055);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(255, 0, 85, 0.35);
+            margin-left: auto;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(255, 0, 85, 0.45);
+        }
+
+        .btn-save-image {
+            background: linear-gradient(135deg, #ff0066, #d6004c);
+            color: white;
+            box-shadow: 0 10px 25px rgba(214, 0, 76, 0.4);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-save-image:hover {
+            transform: scale(1.04);
+            box-shadow: 0 12px 30px rgba(214, 0, 76, 0.55);
+        }
+
+        /* =========================================================
+           PRINTABLE / CAPTURABLE LOVE CERTIFICATE
+        ========================================================= */
+        .certificate-wrapper {
+            background: #fffdfa;
+            border: 4px double #b8144c;
+            border-radius: 20px;
+            padding: 30px 25px;
+            position: relative;
+            box-shadow: inset 0 0 25px rgba(214, 34, 70, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .cert-header {
+            text-align: center;
+            border-bottom: 2px dashed #ffb3c6;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .cert-header h3 {
+            font-family: 'Cinzel', 'Playfair Display', serif;
+            font-size: 24px;
+            color: #a30f3c;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .cert-header span {
+            font-size: 12px;
+            color: #8c5268;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .cert-body {
+            font-size: 14.5px;
+            line-height: 2.1;
+            color: #444;
+            margin-bottom: 25px;
+        }
+
+        .cert-body strong {
+            color: #c9184a;
+            font-size: 16px;
+        }
+
+        .cert-summary-box {
+            background: #fff5f8;
+            border: 1px solid #ffd4e2;
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin: 15px 0;
+        }
+
+        .cert-summary-box li {
+            list-style: none;
+            margin-bottom: 6px;
+            font-size: 13.5px;
+        }
+
+        .cert-signatures {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 35px;
+            padding: 0 15px;
+        }
+
+        .signature-line {
+            width: 170px;
+            text-align: center;
+            border-top: 1.5px solid #8c5268;
+            padding-top: 6px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .cert-seal {
+            font-size: 42px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 22px 16px; }
+            h2.title { font-size: 20px; }
+            .choices-grid { grid-template-columns: repeat(2, 1fr); }
+            .action-btns { justify-content: center; }
+            .btn { width: 100%; text-align: center; justify-content: center; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Step Progress Dots -->
+    <div class="step-progress">
+        <div class="step-dot active" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+        <div class="step-dot" id="dot3"></div>
+        <div class="step-dot" id="dot4"></div>
+    </div>
+
+    <!-- =====================================================
+         STEP 1: COUPLE DETAILS
+    ====================================================== -->
+    <div class="step-content active" id="step1">
+        <h2 class="title">💑 ကျွန်တော်တို့နှစ်ယောက်ရဲ့ အချစ်မှတ်တမ်း</h2>
+        <p class="subtitle">ချစ်သူနှစ်ဦးရဲ့ နာမည်နဲ့ စတင်ချစ်ကြိုက်ခဲ့တဲ့ နေ့ရက်လေး ထည့်ပေးပါ</p>
+
+        <div class="input-group">
+            <label>👤 ကိုယ့်နာမည် (သို့မဟုတ်) ခေါ်နေကျ နာမည်ပြောင်</label>
+            <input type="text" id="partner1" class="input-control">
+        </div>
+
+        <div class="input-group">
+            <label>🌸 ချစ်ရသူရဲ့ နာမည် (သို့မဟုတ်) ချစ်စနိုးခေါ်တဲ့ နာမည်</label>
+            <input type="text" id="partner2" class="input-control" >
+        </div>
+
+        <div class="input-group">
+            <label>🗓️ စတင်ချစ်ကြိုက်ခဲ့သည့်နေ့ (Anniversary Date)</label>
+            <input type="date" id="anniversaryDate" class="input-control" value="2020-11-17">
+        </div>
+
+        <div class="action-btns">
+            <button class="btn btn-next" onclick="goToStep(2)">ရှေ့သို့သွားမည် ➔</button>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         STEP 2: ROMANTIC CHOICES
+    ====================================================== -->
+    <div class="step-content" id="step2">
+        <h2 class="title">✨ ဒီနေ့ Date လုပ်ရင် ဘာတွေလုပ်ကြမလဲ?</h2>
+        <p class="subtitle">နှစ်ယောက်အတူတူ သဘောကျတဲ့ အစီအစဉ်လေးတွေကို ရွေးချယ်ပါ</p>
+
+        <label style="font-weight:700; color:#7a1c43; margin-bottom:8px; display:block;">🍲 ဘာစားကြမလဲ? (Dinner Choice)</label>
+        <div class="choices-grid" id="foodChoices">
+            <div class="choice-card selected" onclick="selectSingle(this, 'food')">
+                <span class="icon">🍲</span>
+                <span class="text">ဟော့ပေါ့ / အကင်</span>
+            </div>
+            <div class="choice-card" onclick="selectSingle(this, 'food')">
+                <span class="icon">🍷</span>
+                <span class="text">Rooftop Dinner</span>
+            </div>
+            <div class="choice-card" onclick="selectSingle(this, 'food')">
+                <span class="icon">🍡</span>
+                <span class="text">လမ်းဘေး အစားအသောက်</span>
+            </div>
+            <div class="choice-card" onclick="selectSingle(this, 'food')">
+                <span class="icon">👩‍🍳</span>
+                <span class="text">အိမ်မှာ ကိုယ်တိုင်ချက်စားမယ်</span>
+            </div>
+        </div>
+
+        <label style="font-weight:700; color:#7a1c43; margin-bottom:8px; display:block; margin-top:15px;">🎡 ဘယ်သွားလည်ကြမလဲ? (Activity Choice)</label>
+        <div class="choices-grid" id="activityChoices">
+            <div class="choice-card" onclick="selectSingle(this, 'activity')">
+                <span class="icon">🎬</span>
+                <span class="text">ရုပ်ရှင်ကြည့် / Cuddle</span>
+            </div>
+            <div class="choice-card" onclick="selectSingle(this, 'activity')">
+                <span class="icon">☕</span>
+                <span class="text">Café Hopping လျှောက်ထိုင်</span>
+            </div>
+            <div class="choice-card selected" onclick="selectSingle(this, 'activity')">
+                <span class="icon">🌌</span>
+                <span class="text">ညဘက် လေညှင်းခံ လမ်းလျှောက်</span>
+            </div>
+            <div class="choice-card" onclick="selectSingle(this, 'activity')">
+                <span class="icon">🎡</span>
+                <span class="text">ကစားကွင်း / ပန်းခြံ</span>
+            </div>
+        </div>
+
+        <div class="action-btns">
+            <button class="btn btn-prev" onclick="goToStep(1)">⬅️ နောက်သို့</button>
+            <button class="btn btn-next" onclick="goToStep(3)">ရှေ့သို့သွားမည် ➔</button>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         STEP 3: LOVE COUPONS & PROMISES
+    ====================================================== -->
+    <div class="step-content" id="step3">
+        <h2 class="title">🎁 ချစ်သူအတွက် လက်ဆောင် & ကတိကဝတ်</h2>
+        <p class="subtitle">ချစ်သူဆီက အလိုချင်ဆုံး Love Coupon တစ်ခုကို ရွေးပါ</p>
+
+        <div class="choices-grid" id="couponChoices">
+            <div class="choice-card" onclick="selectSingle(this, 'coupon')">
+                <span class="icon">🤗</span>
+                <span class="text">အကန့်အသတ်မရှိ ဖက်ခွင့်</span>
+            </div>
+            <div class="choice-card" onclick="selectSingle(this, 'coupon')">
+                <span class="icon">👑</span>
+                <span class="text">တစ်နေ့လုံး ဘုရင်/ဘုရင်မ ဆက်ဆံမှု</span>
+            </div>
+            <div class="choice-card selected" onclick="selectSingle(this, 'coupon')">
+                <span class="icon">🛡️</span>
+                <span class="text">စိတ်မကောက်ရ စည်းမျဉ်း Pass</span>
+            </div>
+            <div class="choice-card" onclick="selectSingle(this, 'coupon')">
+                <span class="icon">🎁</span>
+                <span class="text">Surprise လက်ဆောင်တစ်ခု</span>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-top:20px;">
+            <label>💌 ချစ်သူထံသို့ အထူးပေးချင်သော ရင်ဖွင့်စကား (Secret Love Note)</label>
+            <textarea id="customPromise" class="input-control" rows="3">မင်းနဲ့အတူရှိနေရတဲ့ အချိန်တိုင်းက ကိုယ့်အတွက် တန်ဖိုးအရှိဆုံးပါပဲ... အမြဲတမ်းချစ်နေပါ့မယ် ❤️🤭</textarea>
+        </div>
+
+        <div class="action-btns">
+            <button class="btn btn-prev" onclick="goToStep(2)">⬅️ နောက်သို့</button>
+            <button class="btn btn-next" onclick="generateCertificate()">စာချုပ်ထုတ်ယူမည် ✨</button>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         STEP 4: FINAL REVEAL & SAVE AS IMAGE
+    ====================================================== -->
+    <div class="step-content" id="step4">
+        
+        <!-- ဒီဘောင်လေးတစ်ခုလုံးကို ဓာတ်ပုံအဖြစ် ပြောင်းလဲပေးမည် -->
+        <div class="certificate-wrapper" id="printableCert">
+            <div class="cert-header">
+                <h3>CERTIFICATE OF LOVE</h3>
+                <span>တရားဝင် ထာဝရ အချစ်စာချုပ် & အမှတ်တရလွှာ</span>
+            </div>
+
+            <div class="cert-body">
+                ဤစာချုပ်သည် <strong id="certP1">မောင် အောင်လေး</strong> နှင့် <strong id="certP2">သဲလေး စုစု</strong> တို့ နှစ်ဦးကြား အပြန်အလှန် ချစ်ခြင်း၊ နားလည်မှုနှင့် သစ္စာတရားတို့ဖြင့် တရားဝင် ချုပ်ဆိုထားသော အချစ်စာချုပ် ဖြစ်ပါသည်။
+                <br>
+                စတင်တွဲခဲ့သည့်နေ့ - <span id="certDate" style="color:#b8144c; font-weight:700;">2020-11-17</span>
+                
+                <div class="cert-summary-box">
+                    <strong>💖 ရွေးချယ်ထားသော Date အစီအစဉ်များ -</strong>
+                    <ul style="margin-top: 8px;">
+                        <li>🍲 စားသောက်မည့်အရာ - <span id="summaryFood" style="font-weight:700; color:#b8144c;"></span></li>
+                        <li>🌌 သွားလည်မည့်နေရာ - <span id="summaryActivity" style="font-weight:700; color:#b8144c;"></span></li>
+                        <li>🎁 အထူးရရှိမည့် ခံစားခွင့် - <span id="summaryCoupon" style="font-weight:700; color:#b8144c;"></span></li>
+                    </ul>
+                </div>
+
+                <div style="font-style: italic; color:#773a50; margin-top: 10px; border-left: 3px solid #ff4d79; padding-left: 12px;">
+                    “<span id="summaryNote"></span>”
+                </div>
+            </div>
+
+            <div class="cert-signatures">
+                <div class="signature-line">
+                    <span id="sig1" style="font-weight:bold; color:#a30f3c;">မောင် အောင်လေး</span><br>
+                    ( လက်မှတ် / Signature )
+                </div>
+                <div class="cert-seal">💍</div>
+                <div class="signature-line">
+                    <span id="sig2" style="font-weight:bold; color:#a30f3c;">သဲလေး စုစု</span><br>
+                    ( လက်မှတ် / Signature )
+                </div>
+            </div>
+        </div>
+
+        <div class="action-btns">
+            <button class="btn btn-prev" onclick="goToStep(3)">⬅️ ပြန်ပြင်မည်</button>
+            <button class="btn btn-save-image" id="btnSaveImage" onclick="downloadCertificateAsImage()">
+                🖼️ ဓာတ်ပုံအဖြစ် သိမ်းမည် (Save as PNG)
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    /* Step Navigation */
+    function goToStep(step) {
+        document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.step-dot').forEach(el => el.classList.remove('active'));
+
+        document.getElementById(`step${step}`).classList.add('active');
+        document.getElementById(`dot${step}`).classList.add('active');
+    }
+
+    /* Choice Card Selector */
+    function selectSingle(card, type) {
+        const parent = card.parentElement;
+        parent.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+    }
+
+    function getSelectedText(containerId) {
+        const selected = document.querySelector(`#${containerId} .choice-card.selected .text`);
+        return selected ? selected.innerText : "";
+    }
+
+    /* Generate & Populate Certificate */
+    function generateCertificate() {
+        const p1 = document.getElementById('partner1').value.trim() || "မောင်";
+        const p2 = document.getElementById('partner2').value.trim() || "သဲလေး";
+        const date = document.getElementById('anniversaryDate').value || "2020-11-17";
+        const note = document.getElementById('customPromise').value.trim();
+
+        document.getElementById('certP1').innerText = p1;
+        document.getElementById('certP2').innerText = p2;
+        document.getElementById('sig1').innerText = p1;
+        document.getElementById('sig2').innerText = p2;
+        document.getElementById('certDate').innerText = date;
+
+        document.getElementById('summaryFood').innerText = getSelectedText('foodChoices');
+        document.getElementById('summaryActivity').innerText = getSelectedText('activityChoices');
+        document.getElementById('summaryCoupon').innerText = getSelectedText('couponChoices');
+        document.getElementById('summaryNote').innerText = note;
+
+        goToStep(4);
+
+        // Celebration Confetti
+        confetti({
+            particleCount: 150,
+            spread: 80,
+            origin: { y: 0.6 },
+            colors: ['#ff3366', '#ff85a1', '#fbb1bd', '#ffffff']
+        });
+    }
+
+    /* =========================================================
+       ဓာတ်ပုံ (PNG Image) အဖြစ် ဖုန်းထဲ သိမ်းဆည်းပေးသော Function
+    ========================================================= */
+    function downloadCertificateAsImage() {
+        const cert = document.getElementById('printableCert');
+        const btn = document.getElementById('btnSaveImage');
+        const originalText = btn.innerHTML;
+
+        btn.innerHTML = "⏳ ဓာတ်ပုံထုတ်ယူနေပါသည်...";
+        btn.style.pointerEvents = "none";
+
+        // HTML ကို ကြည်လင်ပြတ်သားသော HD Canvas ပုံအဖြစ် ပြောင်းလဲခြင်း
+        html2canvas(cert, {
+            scale: 3, // 3x High Resolution (အရမ်းကြည်လင်ပြတ်သားစေရန်)
+            backgroundColor: "#fffdfa",
+            useCORS: true
+        }).then(canvas => {
+            // PNG ဓာတ်ပုံ ဖိုင်အဖြစ် ဒေါင်းလုဒ် ဆွဲပေးခြင်း
+            const link = document.createElement('a');
+            link.download = 'Our-Love-Certificate.png';
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+
+            btn.innerHTML = "✅ ဓာတ်ပုံသိမ်းဆည်းပြီးပါပြီ!";
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.pointerEvents = "auto";
+            }, 2500);
+        }).catch(err => {
+            alert("ဓာတ်ပုံထုတ်ယူရာတွင် အဆင်မပြေဖြစ်သွားပါသည်");
+            btn.innerHTML = originalText;
+            btn.style.pointerEvents = "auto";
+        });
+    }
+</script>
+
+</body>
+</html>

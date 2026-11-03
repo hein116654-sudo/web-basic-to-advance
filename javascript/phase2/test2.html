@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Handling Demo</title>
+</head>
+<body>
+    <div>
+        <h2>Event Handling</h2>
+
+        <div>
+            <label for="user-name">Enter Name:</label>
+            <input type="text" id="user-name" placeholder="Type something...">
+            <div>
+                Typed Value: <strong id="output-text">-</strong>
+            </div>
+        </div>
+
+        <button id="submit-btn">Submit</button>
+    </div>
+
+    <script>
+        const button = document.querySelector("#submit-btn");
+        const textInput = document.querySelector("#user-name");
+        const outputText = document.querySelector("#output-text");
+
+        // Listen for click event
+        button.addEventListener("click", () => {
+            alert("Button was clicked!");
+        });
+
+        // Listen for input event (triggers on every keystroke)
+        textInput.addEventListener("input", (event) => {
+            console.log("Typed text:", event.target.value);
+            outputText.textContent = event.target.value || "-";
+        });
+    </script>
+
+</body>
+</html>
