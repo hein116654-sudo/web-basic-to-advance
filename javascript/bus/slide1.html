@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Stock In Template Dialog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-teal: #0d9488;
+      --teal-light: #ccfbf1;
+      --teal-text: #0f766e;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --card-bg: #f8fafc;
+      --border-color: #e2e8f0;
+      --card-border: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f1f5f9;
+      color: var(--text-dark);
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #ffffff;
+      max-width: 1200px;
+      width: 100%;
+      border-radius: 20px;
+      padding: 48px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+    }
+
+    /* Header Section */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--primary-teal);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-dark);
+      letter-spacing: -0.02em;
+    }
+
+    .badge {
+      background-color: var(--teal-light);
+      color: var(--teal-text);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* Main Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* Left Placeholder / Card */
+    .preview-box {
+      border: 2px dashed var(--card-border);
+      border-radius: 16px;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 36px;
+      min-height: 480px;
+      text-align: center;
+    }
+
+    .excel-icon {
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .preview-subtext {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+      max-width: 320px;
+      line-height: 1.5;
+    }
+
+    /* Right Cards */
+    .cards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .info-card {
+      background-color: var(--card-bg);
+      border: 1px solid #edf2f7;
+      border-left: 4px solid var(--primary-teal);
+      border-radius: 12px;
+      padding: 20px 22px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.08);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .card-icon {
+      color: var(--primary-teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .card-description {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text-muted);
+      font-weight: 500;
+      padding-left: 28px;
+    }
+
+    .card-description strong {
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .preview-box {
+        min-height: 280px;
+      }
+
+      .card-description {
+        padding-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div>
+        <div class="subtitle">BULK STOCK IN &bull; STEP 1</div>
+        <h1 class="title">Download Stock In Template Dialog</h1>
+      </div>
+      <div class="badge">Template Export</div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="content-grid">
+      
+      <!-- Left Column: Placeholder Preview Box -->
+      <div class="preview-box">
+        <div class="excel-icon">
+          <!-- Excel Document SVG Icon -->
+          <svg width="42" height="50" viewBox="0 0 42 50" fill="none">
+            <path d="M4 0C1.79 0 0 1.79 0 4V46C0 48.21 1.79 50 4 50H38C40.21 50 42 48.21 42 46V14L28 0H4Z" fill="#0d9488"/>
+            <path d="M28 0V14H42L28 0Z" fill="#0b7a70" opacity="0.4"/>
+            <!-- 'X' Symbol -->
+            <path d="M16.5 22L20.8 28.5L16.2 35H19.5L22.5 30.3L25.5 35H28.8L24.1 28.5L28.5 22H25.3L22.5 26.6L19.7 22H16.5Z" fill="#ffffff"/>
+          </svg>
+        </div>
+        <div class="preview-title">Insert Image: Template Dialog</div>
+        <div class="preview-subtext">
+          Screenshot of Download Stock In Template modal showing Brand &amp; Category filters
+        </div>
+      </div>
+
+      <!-- Right Column: Info Cards -->
+      <div class="cards-list">
+        
+        <!-- Card 1 -->
+        <div class="info-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+            </div>
+            <h3 class="card-title">Optional Brand &amp; Category Filters</h3>
+          </div>
+          <p class="card-description">
+            Users can filter items by selecting specific Brands or Categories before generating the file.
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="info-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="8 12 12 16 16 12"></polyline>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+              </svg>
+            </div>
+            <h3 class="card-title">One-Click Download Action</h3>
+          </div>
+          <p class="card-description">
+            Clicking <strong>Download</strong> exports a pre-structured .xlsx file tailored with requested item details.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

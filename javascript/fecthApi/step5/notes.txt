@@ -1,0 +1,6 @@
+Status Code	            Category	      Meaning
+200 OK	                Success	        The request was completed successfully (e.g., GET, PUT).
+201 Created            	Success	Data    A new resource has been successfully created (POST).
+400 Bad Request	        Client Error	The data sent by the client is invalid or incorrectly formatted.
+404 Not Found	        Client Error	The requested resource could not be found (e.g., an incorrect URL or non-existent data).
+500 Server Error	    Server Error	An unexpected error occurred on the server side, such as a server crash.

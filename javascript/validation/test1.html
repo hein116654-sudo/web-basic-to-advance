@@ -9,7 +9,7 @@
 
 <body>
 
-    <form name="myform" method="post" action="abc.jsp" onsubmit="return validateform(event)">
+    <form name="myform" method="post" onsubmit="return validateform(event)">
 
         Name:
         <input type="text" name="name">
@@ -30,6 +30,7 @@
             var name = document.myform.name.value;
             var password = document.myform.password.value;
 
+
             // Name validation
             if (name == null || name == "") {
                 alert("Name can't be blank");
@@ -37,18 +38,18 @@
             }
 
             // Password validation
-            if (password.length < 6) {
-                alert("Password must be at least 6 characters long.");
-                return false;
-            }
+            // if (password.length < 6) {
+            //     alert("Password must be at least 6 characters long.");
+            //     return false;
+            // }
 
             // Validation successful
-            alert("Successfully registered!");
+            // alert("Successfully registered!");
 
             // Prevent form from submitting for this demo
-            event.preventDefault();
+            // event.preventDefault();
 
-            return true;
+            // return true;
         }
 
     </script>

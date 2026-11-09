@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Registration Form</title>
+
+    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body class="bg-light">
+
+    <div class="container mt-5 mb-5">
+
+        <div class="card shadow-lg border-0 rounded-4 mx-auto"
+            style="max-width: 800px;">
+
+            <div class="card-header bg-primary text-white text-center py-4">
+
+                <h2 class="fw-bold mb-2">
+                    Student Registration Form
+                </h2>
+
+                <p class="mb-0">
+                    Please fill in your information below
+                </p>
+
+            </div>
+
+            <div class="card-body p-4">
+
+                <form name="myform" method="post" onsubmit="return validateform(event)">
+
+                    <table class="table table-bordered align-middle mb-4">
+
+                        <tr>
+                            <td class="fw-semibold p-3" width="30%">
+                                <label for="name">Name</label>
+                            </td>
+                            <td class="p-3">
+                                <input type="text"
+                                    class="form-control"
+                                    id="name"
+                                    name="name"
+                                    placeholder="Enter your name"
+                                    >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-semibold p-3" width="30%"> <label for="password">Password</label></td>
+                            <td class="p-3">
+                                <input type="password"
+                                    class="form-control"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Enter your password"
+                                    >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-semibold p-3">
+                                <label for="fname">Father Name</label>
+                            </td>
+                            <td class="p-3">
+                                <input type="text"
+                                    class="form-control"
+                                    id="fname"
+                                    name="fname"
+                                    placeholder="Enter father name">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-semibold p-3">
+                                <label for="mobile">Mobile No</label>
+                            </td>
+                            <td class="p-3">
+                                <input type="tel"
+                                    class="form-control"
+                                    id="mobile"
+                                    name="mobile"
+                                    placeholder="Enter mobile number">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-semibold p-3">
+                                <label for="email">Email</label>
+                            </td>
+                            <td class="p-3">
+                                <input type="email"
+                                    class="form-control"
+                                    id="email"
+                                    name="email"
+                                    placeholder="Enter email address"
+                                    >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-semibold p-3">
+                                <label for="dob">DOB</label>
+                            </td>
+                            <td class="p-3">
+                                <input type="date"
+                                    class="form-control"
+                                    id="dob"
+                                    name="dob">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-semibold p-3">
+                                <label for="Address">Address</label>
+                            </td>
+                            <td class="p-3">
+                                <textarea
+                                    class="form-control"
+                                    name="Address"
+                                    id="Address"
+                                    rows="3"
+                                    placeholder="Enter your address"></textarea>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-semibold p-3">
+                                Gender
+                            </td>
+                            <td class="p-3">
+
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" id="male" name="gender" value="male">
+                                    <label class="form-check-label" for="male"> Male</label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" id="female" name="gender" value="female">
+                                    <label class="form-check-label" for="female"> Female</label>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-semibold p-3">
+                                <label for="city">City</label>
+                            </td>
+                            <td class="p-3">
+                                <select class="form-select"
+                                    name="city"
+                                    id="city">
+
+                                    <option value="Yangon">Yangon</option>
+                                    <option value="Mandalay">Mandalay</option>
+                                    <option value="NayPhyiTaw">Nay Phyi Taw</option>
+
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-semibold p-3">
+                                <label for="District">District</label>
+                            </td>
+                            <td class="p-3">
+                                <select class="form-select"
+                                    name="District"
+                                    id="District">
+
+                                    <option value="" disabled selected>
+                                        Select District
+                                    </option>
+
+                                    <option value="Yangon">Yangon</option>
+                                    <option value="Mandalay">Mandalay</option>
+                                    <option value="NayPhyiTaw">Nay Phyi Taw</option>
+
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-semibold p-3">
+                                <label for="CourseCode">Course Code</label>
+                            </td>
+                            <td class="p-3">
+
+                                <input type="text"
+                                    class="form-control"
+                                    id="CourseCode"
+                                    name="CourseCode"
+                                    list="CourseCodeList"
+                                    placeholder="Enter course code">
+
+                                <datalist id="CourseCodeList">
+                                    <option value="java"></option>
+                                    <option value="php"></option>
+                                    <option value="html"></option>
+                                </datalist>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-semibold p-3">
+                                <label for="CourseName">Course Name</label>
+                            </td>
+                            <td class="p-3">
+
+                                <input type="text"
+                                    class="form-control"
+                                    id="CourseName"
+                                    name="CourseName"
+                                    list="CourseNameList"
+                                    placeholder="Enter course name">
+
+                                <datalist id="CourseNameList">
+                                    <option value="Java Programming"></option>
+                                    <option value="PHP Development"></option>
+                                    <option value="HTML/CSS"></option>
+                                </datalist>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-semibold p-3">
+                                Interested In
+                            </td>
+
+                            <td class="p-3">
+
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox"
+                                        class="form-check-input"
+                                        id="programming"
+                                        name="interest[]"
+                                        value="Programming">
+
+                                    <label class="form-check-label"
+                                        for="programming">
+                                        Programming
+                                    </label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox"
+                                        class="form-check-input"
+                                        id="Swimming"
+                                        name="interest[]"
+                                        value="Swimming">
+
+                                    <label class="form-check-label"
+                                        for="Swimming">
+                                        Swimming
+                                    </label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox"
+                                        class="form-check-input"
+                                        id="Football"
+                                        name="interest[]"
+                                        value="Football">
+
+                                    <label class="form-check-label"
+                                        for="Football">
+                                        Football
+                                    </label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" id="Dancing" name="Dancing" value="Dancing">
+
+                                    <label class="form-check-label" for="Dancing"> Dancing  </label>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                    </table>
+
+                    <div class="text-center mt-4">
+
+                        <button type="submit"
+                            class="btn btn-primary px-5 py-2 me-2">
+                            Register
+                        </button>
+
+                        <button type="reset"
+                            class="btn btn-secondary px-5 py-2">
+                            Cancel
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+
+    function validateform(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+
+        // Name cannot be empty
+        if (name === "") {
+            alert("Name can't be blank");
+            return false;
+        }
+
+        // Only letters and spaces
+        const namePattern = /^[a-zA-Z ]+$/;
+
+        if (!namePattern.test(name)) {
+            alert("Name must contain only letters!");
+            return false;
+        }
+
+        // Minimum 3 characters
+        if (name.length < 3) {
+            alert("Name must be at least 3 characters!");
+            return false;
+        }
+
+        alert("Successfully registered!");
+        return true;
+    }
+
+
+    </script>
+
+</body>
+</html>

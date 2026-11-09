@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POST API Example</title>
+</head>
+<body>
+
+    <h1>Create User - POST Method</h1>
+
+    <script>
+
+        async function createUser() {
+
+            try {
+
+                const newUser = {
+                    name: 'Ko Thant',
+                    email: 'kothant@gmail.com',
+                    role: 'Developer'
+                };
+
+                const response = await fetch(
+                    "https://jsonplaceholder.typicode.com/users",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(newUser)
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("HTTP Error: " + response.status);
+                }
+
+                const createdData = await response.json();
+
+                console.log("User created successfully!");
+                console.log("Created User ID:", createdData.id);
+                console.log("Created User:", createdData);
+
+            } catch (error) {
+
+                console.error("Error:", error.message);
+
+            }
+        }
+
+        createUser();
+
+    </script>
+
+</body>
+</html>

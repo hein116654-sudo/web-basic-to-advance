@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SessionStorage vs LocalStorage Mini Task</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 650px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9fb;
+      color: #333;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    .btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-bottom: 10px;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .output-box {
+      margin-top: 15px;
+      padding: 12px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>🔄 sessionStorage Demo</h2>
+    <p>Data stored here lasts <b>only for the current tab/session</b>. If you open a new tab, it will return <code>null</code>.</p>
+    <button class="btn" onclick="testSessionStorage()">1. Set & Get sessionStorage</button>
+    <div id="sessionOutput" class="output-box">Click the button to test sessionStorage...</div>
+  </div>
+
+  <div class="card">
+    <h2>💾 localStorage Demo</h2>
+    <p>Data stored here <b>persists even if you open a new tab</b> or restart the browser.</p>
+    <button class="btn" onclick="testLocalStorage()">2. Set & Get localStorage</button>
+    <div id="localOutput" class="output-box">Click the button to test localStorage...</div>
+  </div>
+
+  <div class="card">
+    <h3>💡 How to test the "New Tab" rule:</h3>
+    <ol>
+      <li>Click the <b>localStorage</b> button above to save <code>XYZ-789</code>.</li>
+      <li>Right-click this page, select <b>Open in New Tab</b> (or copy the URL and open a new tab).</li>
+      <li>In the new tab, check your Console or run the script to see that <code>localStorage</code> still has the data, but <code>sessionStorage</code> is empty!</li>
+    </ol>
+  </div>
+
+  <script>
+    // 1. sessionStorage Test Function
+    function testSessionStorage() {
+      // Set value
+      sessionStorage.setItem("tabId", "ABC-123");
+      
+      // Get value back
+      const retrievedValue = sessionStorage.getItem("tabId");
+      
+      const outputText = `sessionStorage.getItem("tabId") result:\n➔ "${retrievedValue}"\n\n(Tip: Open a new tab, and this value will be null!)`;
+      document.getElementById("sessionOutput").innerText = outputText;
+      
+      console.log("sessionStorage 'tabId' set to:", retrievedValue);
+    }
+
+    // 2. localStorage Test Function
+    function testLocalStorage() {
+      // Set value
+      localStorage.setItem("persistentId", "XYZ-789");
+      
+      // Get value back
+      const retrievedValue = localStorage.getItem("persistentId");
+      
+      const outputText = `localStorage.getItem("persistentId") result:\n➔ "${retrievedValue}"\n\n(Tip: Open a new tab, and this value will STILL be available!)`;
+      document.getElementById("localOutput").innerText = outputText;
+      
+      console.log("localStorage 'persistentId' set to:", retrievedValue);
+    }
+  </script>
+
+</body>
+</html>

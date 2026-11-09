@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Switcher Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .container {
+      text-align: center;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(128, 128, 128, 0.2);
+    }
+
+    .btn {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.1s ease, opacity 0.2s ease;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: scale(1.03);
+    }
+
+    .btn-dark {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .btn-light {
+      background-color: #e0e0e0;
+      color: #000;
+    }
+
+    .status-text {
+      margin-top: 15px;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 id="heading">Theme Switcher Demo</h1>
+    <p>Your preference is automatically saved in <code>localStorage</code>.</p>
+
+    <!-- Buttons to manually trigger theme changes -->
+    <button class="btn btn-dark" onclick="setDarkMode()">🌙 Dark Mode</button>
+    <button class="btn btn-light" onclick="setLightMode()">☀️ Light Mode</button>
+
+    <div class="status-text" id="status">Current theme status will appear here.</div>
+  </div>
+
+  <script>
+    const statusText = document.getElementById("status");
+
+    // 1. When user switches to Dark Mode
+    function setDarkMode() {
+      localStorage.setItem("theme", "dark");
+      document.body.style.backgroundColor = "#222";
+      document.body.style.color = "#fff";
+      statusText.innerText = "Current Mode: 🌙 Dark Mode (Saved to localStorage)";
+      console.log("Theme set to: Dark");
+    }
+
+    // 2. When user switches to Light Mode
+    function setLightMode() {
+      localStorage.setItem("theme", "light");
+      document.body.style.backgroundColor = "#fff";
+      document.body.style.color = "#000";
+      statusText.innerText = "Current Mode: ☀️ Light Mode (Saved to localStorage)";
+      console.log("Theme set to: Light");
+    }
+
+    // 3. On page load: Check user's saved preference in localStorage and apply automatically
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "dark") {
+      setDarkMode();
+    } else {
+      setLightMode();
+    }
+  </script>
+
+</body>
+</html>

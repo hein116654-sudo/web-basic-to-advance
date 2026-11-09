@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management System (Fetch API)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>👥 User Management System</h2>
+
+    <!-- User အသစ်ထည့်သွင်းရန် Form -->
+    <form id="userForm">
+      <input type="text" id="nameInput" placeholder="အမည် ရိုက်ထည့်ပါ" required>
+      <input type="email" id="emailInput" placeholder="အီးမေးလ် ရိုက်ထည့်ပါ" required>
+      <button type="submit" id="submitBtn">User အသစ်ထည့်မည်</button>
+    </form>
+
+    <!-- Loading ပြသရန် နေရာ -->
+    <div id="loading" class="loading">ခေတ္တစောင့်ဆိုင်းပါ Data များ ဆွဲယူနေပါသည်...</div>
+
+    <!-- Error Message ပြသရန် နေရာ -->
+    <div id="errorMessage" class="error"></div>
+
+    <!-- Users စာရင်း ပြသရန် နေရာ -->
+    <ul id="userList"></ul>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

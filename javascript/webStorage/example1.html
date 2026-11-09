@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Storage & JSON Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+    }
+    .output-box {
+      margin-top: 15px;
+      padding: 12px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Web Storage & JSON Demo</h2>
+    <p>Click the buttons below to test <code>localStorage</code> operation:</p>
+
+    <button class="btn" onclick="saveData()">1. Save to LocalStorage</button>
+    <button class="btn" onclick="readData()">2. Read from LocalStorage</button>
+    <button class="btn btn-danger" onclick="clearData()">3. Clear Storage</button>
+
+    <h3>Output:</h3>
+    <div id="output" class="output-box">Press a button to see results...</div>
+  </div>
+
+  <script>
+    // 1. Define the User Object
+    const currentUser = {
+      id: 101,
+      name: "Mya Mya",
+      theme: "dark"
+    };
+
+    const outputDiv = document.getElementById("output");
+
+    // Save Object to localStorage as JSON String
+    function saveData() {
+      localStorage.setItem("userProfile", JSON.stringify(currentUser));
+      outputDiv.innerText = "✅ Data saved to localStorage!\n\nStored Value (JSON String):\n" + JSON.stringify(currentUser);
+      console.log("✅ Data has been successfully saved to localStorage!");
+    }
+
+    // Retrieve and Parse JSON Object from localStorage
+    function readData() {
+      const storedData = localStorage.getItem("userProfile");
+
+      if (!storedData) {
+        outputDiv.innerText = "⚠️ No data found in localStorage! Click 'Save' first.";
+        return;
+      }
+
+      // Convert JSON string back to JavaScript Object
+      const userObject = JSON.parse(storedData);
+
+      outputDiv.innerText = 
+        `Raw string from storage:\n${storedData}\n\n` +
+        `Parsed Object Properties:\n` +
+        `ID: ${userObject.id}\n` +
+        `User Name: ${userObject.name}\n` +
+        `Theme Choice: ${userObject.theme}`;
+
+      console.log("Raw string from Storage:", storedData);
+      console.log("User Name:", userObject.name);     // "Mya Mya"
+      console.log("Theme Choice:", userObject.theme); // "dark"
+    }
+
+    // Clear item from localStorage
+    function clearData() {
+      localStorage.removeItem("userProfile");
+      outputDiv.innerText = "🗑️ 'userProfile' cleared from localStorage.";
+      console.log("🗑️ Storage cleared!");
+    }
+  </script>
+
+</body>
+</html>
